@@ -30,6 +30,14 @@ var invalidExamples = []example{
 	{"(CA[UTF-8])", "missing semi-colon"},
 }
 
+func TestLexFilterNewlines(t *testing.T) {
+	l := lex("(;CA[UTF-8]\n\rSZ[19]\r\nEV[The Game of the Century]")
+
+	if l.input != "(;CA[UTF-8]SZ[19]EV[The Game of the Century]" {
+		t.Error("expected lexer to strip newlines")
+	}
+}
+
 func TestLexErrors(t *testing.T) {
 	for ndx := range invalidExamples {
 		l := lex(invalidExamples[ndx].example)

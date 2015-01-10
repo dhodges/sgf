@@ -72,6 +72,12 @@ func succinct(s string) string {
 	}
 }
 
+func strip_newlines(s string) string {
+	result := strings.Replace(s, "\n", "", -1)
+	result = strings.Replace(result, "\r", "", -1)
+	return result
+}
+
 func (i item) String() string {
 	switch i.typ {
 	case itemEOF:
@@ -226,7 +232,7 @@ func (l *lexer) run() {
 // lex creates a new scanner for the input string.
 func lex(input string) *lexer {
 	l := &lexer{
-		input: input,
+		input: strip_newlines(input),
 		items: make(chan item),
 	}
 	go l.run()
