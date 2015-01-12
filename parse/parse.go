@@ -145,6 +145,10 @@ func (gi *GameInfo) AddProperty(prop Property) {
 	}
 }
 
+func (sgf *SGFGame) AddError(msg string) {
+	sgf.errors = append(sgf.errors, errors.New(msg))
+}
+
 func (sgf *SGFGame) Parse(input string) *SGFGame {
 	var currentNode *Node
 	l := lex(input)
@@ -156,7 +160,7 @@ Loop:
 		i := l.nextItem()
 		switch i.typ {
 		case itemError:
-			sgf.errors = append(sgf.errors, errors.New(i.val))
+			sgf.AddError(i.val)
 			break Loop
 		case itemRightParen, itemEOF:
 			break Loop

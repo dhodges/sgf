@@ -48,3 +48,12 @@ Loop:
 		}
 	}
 }
+
+func TestSGFErrors(t *testing.T) {
+	sgf := new(SGFGame)
+	sgf.AddError("hells belles")
+	sgf.AddError("hades' ladies")
+	if len(sgf.errors) != 2 {
+		t.Errorf("SGFGame error count is wrong (found %d, expected 2)", len(sgf.errors))
+	}
+}
