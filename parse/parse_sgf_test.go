@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func sgfFileList(dirname string) ([]string, error) {
+func listSgfFiles(dirname string) ([]string, error) {
 	var fileList []string
 	dirname = strings.TrimSpace(dirname)
 	if dirname[len(dirname)-1] != '/' {
@@ -27,7 +27,7 @@ func sgfFileList(dirname string) ([]string, error) {
 
 func TestParsingSGF(t *testing.T) {
 	dirname := "/Users/david/Google Drive/SGF/AWAGC-2014"
-	fileList, err := sgfFileList(dirname)
+	fileList, err := listSgfFiles(dirname)
 	if err != nil {
 		t.Error(fmt.Sprintf("error reading sgf file list: %s", err.Error()))
 		return
