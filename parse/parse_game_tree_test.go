@@ -14,8 +14,7 @@ func errorUnlessStrEqual(t *testing.T, found string, expected string, errMsg str
 }
 
 var gameTreeFixture = "(" +
-	";PB[Lee Sedol]BR[6p]BT[South Korea]" +
-	"PW[Gu Li]WR[9p]WT[China]RE[B+2]" +
+	";PB[Lee Sedol]BR[6p]BT[South Korea]PW[Gu Li]WR[9p]WT[China]RE[B+2]" +
 	";B[qc]C[At that time, Go Seigen was just 20 years' old...]" +
 	";W[cd]" +
 	";B[dp]" +

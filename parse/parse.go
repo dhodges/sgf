@@ -53,8 +53,8 @@ type Point struct {
 }
 
 type Node struct {
-	properties []Property
 	point      Property
+	properties []Property
 }
 
 func (point *Point) String() string {
