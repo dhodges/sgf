@@ -55,14 +55,11 @@ type Point struct {
 type Node struct {
 	point      Property
 	properties []Property
+	next       *Node
 }
 
 func (point *Point) String() string {
 	return fmt.Sprintf("[%c%c]", point.x, point.y)
-}
-
-type GameTree struct {
-	nodes []Node
 }
 
 func (node *Node) AddProperty(prop Property) {
@@ -74,14 +71,14 @@ func (node *Node) AddProperty(prop Property) {
 	}
 }
 
-func (gt *GameTree) NewNode() *Node {
-	gt.nodes = append(gt.nodes, *new(Node))
-	return &gt.nodes[len(gt.nodes)-1]
+func (node *Node) NewNode() *Node {
+	node.next = new(Node)
+	return node.next
 }
 
 type SGFGame struct {
 	gameInfo GameInfo
-	gameTree GameTree
+	gameTree *Node
 	errors   []error
 }
 
@@ -145,6 +142,14 @@ func (gi *GameInfo) AddProperty(prop Property) {
 	}
 }
 
+func (sgf *SGFGame) NodeCount() int {
+	count := 0
+	for node := sgf.gameTree; node != nil; node = node.next {
+		count += 1
+	}
+	return count
+}
+
 func (sgf *SGFGame) AddError(msg string) {
 	sgf.errors = append(sgf.errors, errors.New(msg))
 }
@@ -168,10 +173,13 @@ Loop:
 			if !parsingSetup && !parsingGame {
 				parsingSetup = true
 			} else {
-				currentNode = sgf.gameTree.NewNode()
 				if parsingSetup && !parsingGame {
 					parsingSetup = false
 					parsingGame = true
+					sgf.gameTree = new(Node)
+					currentNode = sgf.gameTree
+				} else {
+					currentNode = currentNode.NewNode()
 				}
 			}
 		case itemPropertyName:

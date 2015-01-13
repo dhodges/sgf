@@ -24,18 +24,29 @@ var gameTreeFixture = "(" +
 	")"
 
 func TestParsingGameTree(t *testing.T) {
-	gt := new(SGFGame).Parse(gameTreeFixture).gameTree
+	sgf := new(SGFGame).Parse(gameTreeFixture)
 
-	if len(gt.nodes) != 6 {
-		t.Error("game tree is incorrect")
+	if sgf.NodeCount() != 6 {
+		t.Errorf("game tree is incorrect, found %d nodes, expected 6", sgf.NodeCount())
 	}
 
-	errorUnlessStrEqual(t, gt.nodes[0].point.String(), "B[qc]", "1st node move is incorrect")
-	errorUnlessStrEqual(t, gt.nodes[1].point.String(), "W[cd]", "2nd node move is incorrect")
-	errorUnlessStrEqual(t, gt.nodes[2].point.String(), "B[dp]", "3rd node move is incorrect")
-	errorUnlessStrEqual(t, gt.nodes[3].point.String(), "W[pq]", "4th node move is incorrect")
-	errorUnlessStrEqual(t, gt.nodes[4].point.String(), "B[jj]", "5th node move is incorrect")
-	errorUnlessStrEqual(t, gt.nodes[5].point.String(), "W[pd]", "6th node move is incorrect")
+	node := sgf.gameTree
+	errorUnlessStrEqual(t, node.point.String(), "B[qc]", "1st node move is incorrect")
+
+	node = node.next
+	errorUnlessStrEqual(t, node.point.String(), "W[cd]", "2nd node move is incorrect")
+
+	node = node.next
+	errorUnlessStrEqual(t, node.point.String(), "B[dp]", "3rd node move is incorrect")
+
+	node = node.next
+	errorUnlessStrEqual(t, node.point.String(), "W[pq]", "4th node move is incorrect")
+
+	node = node.next
+	errorUnlessStrEqual(t, node.point.String(), "B[jj]", "5th node move is incorrect")
+
+	node = node.next
+	errorUnlessStrEqual(t, node.point.String(), "W[pd]", "6th node move is incorrect")
 }
 
 func TestParsingFullGameTree(t *testing.T) {
@@ -48,9 +59,9 @@ func TestParsingFullGameTree(t *testing.T) {
 	fixture := strings.Replace(string(buf), "\n", "", -1)
 	fixture = strings.Replace(string(buf), "\r", "", -1)
 
-	gt := new(SGFGame).Parse(fixture).gameTree
+	sgf := new(SGFGame).Parse(fixture)
 
-	nodeCount := len(gt.nodes)
+	nodeCount := sgf.NodeCount()
 
 	if nodeCount != 252 {
 		t.Error(fmt.Printf("wrong number of game nodes (found %d, expected 252)\n", nodeCount))
