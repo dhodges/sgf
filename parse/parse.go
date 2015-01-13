@@ -3,6 +3,7 @@ package parse
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type PlayerInfo struct {
@@ -60,6 +61,15 @@ type Node struct {
 
 func (point *Point) String() string {
 	return fmt.Sprintf("[%c%c]", point.x, point.y)
+}
+
+func (node *Node) String() string {
+	attrs := []string{}
+	attrs = append(attrs, node.point.String())
+	for ndx := 0; ndx < len(node.properties); ndx += 1 {
+		attrs = append(attrs, node.properties[ndx].String())
+	}
+	return strings.Join(attrs, "")
 }
 
 func (node *Node) AddProperty(prop Property) {
