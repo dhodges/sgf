@@ -56,6 +56,7 @@ type Point struct {
 type Node struct {
 	point      Property
 	properties []Property
+	variations []*Node
 	next       *Node
 }
 
@@ -84,6 +85,12 @@ func (node *Node) AddProperty(prop Property) {
 func (node *Node) NewNode() *Node {
 	node.next = new(Node)
 	return node.next
+}
+
+func (n *Node) NewVariation() *Node {
+	node := new(Node)
+	n.variations = append(n.variations, node)
+	return node
 }
 
 type SGFGame struct {
@@ -160,6 +167,21 @@ func (sgf *SGFGame) NodeCount() int {
 	return count
 }
 
+func (sgf *SGFGame) NthNode(n int) (node *Node, err error) {
+	if n < 1 {
+		return nil, errors.New("n less than 1")
+	}
+	nodeCount := sgf.NodeCount()
+
+	if n > nodeCount {
+		return nil, errors.New(fmt.Sprintf("n greater than node count (%d)", nodeCount))
+	}
+	for node = sgf.gameTree; n > 1; n -= 1 {
+		node = node.next
+	}
+	return node, nil
+}
+
 func (sgf *SGFGame) AddError(msg string) {
 	sgf.errors = append(sgf.errors, errors.New(msg))
 }
@@ -170,20 +192,29 @@ func (sgf *SGFGame) Parse(input string) *SGFGame {
 	prop := Property{}
 	parsingSetup := false
 	parsingGame := false
+	nodeStack := new(Stack)
+
 Loop:
 	for {
 		i := l.nextItem()
 		switch i.typ {
-		case itemError:
-			sgf.AddError(i.val)
-			break Loop
-		case itemRightParen, itemEOF:
-			break Loop
+		case itemLeftParen:
+			if parsingGame {
+				nodeStack.Push(currentNode)
+				currentNode = currentNode.NewVariation()
+			}
+		case itemRightParen:
+			if parsingGame {
+				node := nodeStack.Pop()
+				if node != nil {
+					currentNode = node.(*Node)
+				}
+			}
 		case itemSemiColon:
 			if !parsingSetup && !parsingGame {
 				parsingSetup = true
 			} else {
-				if parsingSetup && !parsingGame {
+				if !parsingGame {
 					parsingSetup = false
 					parsingGame = true
 					sgf.gameTree = new(Node)
@@ -201,6 +232,11 @@ Loop:
 			} else {
 				currentNode.AddProperty(prop)
 			}
+		case itemError:
+			sgf.AddError(i.val)
+			break Loop
+		case itemEOF:
+			break Loop
 		}
 	}
 	return sgf

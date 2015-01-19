@@ -3,7 +3,6 @@ package parse
 import (
 	"fmt"
 	"io/ioutil"
-	"strings"
 	"testing"
 )
 
@@ -50,20 +49,32 @@ func TestParsingGameTree(t *testing.T) {
 }
 
 func TestParsingFullGameTree(t *testing.T) {
-	buf, err := ioutil.ReadFile("../fixtures/sgf_files/19331016-Honinbo_Shusai-Go_Seigen.sgf")
+	buf, err := ioutil.ReadFile("../fixtures/sgf_files/2014.07.06_WAGC-Rd1-Lithuania-Canada-var.sgf")
 	if err != nil {
 		t.Error(err.Error)
 		return
 	}
 
-	fixture := strings.Replace(string(buf), "\n", "", -1)
-	fixture = strings.Replace(string(buf), "\r", "", -1)
-
-	sgf := new(SGFGame).Parse(fixture)
+	sgf := new(SGFGame).Parse(string(buf))
 
 	nodeCount := sgf.NodeCount()
 
-	if nodeCount != 252 {
-		t.Error(fmt.Printf("wrong number of game nodes (found %d, expected 252)\n", nodeCount))
+	if nodeCount != 7 {
+		t.Error(fmt.Printf("wrong number of game nodes (expected 7, found %d)\n", nodeCount))
 	}
+
+	node, err := sgf.NthNode(7)
+	if err != nil {
+		t.Error(err.Error)
+		return
+	}
+
+	if node.point.String() != "B[hd]" {
+		t.Error(fmt.Sprintf("wrong node: expected 'B[hd]', found '%s'", node.point))
+	}
+
+	if len(node.variations) != 3 {
+		t.Error(fmt.Sprintf("wrong number of variations: expected 3, found '%d'", len(node.variations)))
+	}
+
 }

@@ -323,6 +323,8 @@ func lexLeftBracket(l *lexer) stateFn {
 		return lexLeftBracket
 	case ';':
 		return lexSemiColon
+	case '(':
+		return lexLeftParen
 	case ')':
 		return lexRightParen
 	}
@@ -331,7 +333,7 @@ func lexLeftBracket(l *lexer) stateFn {
 		return lexPropertyName
 	}
 
-	return l.errorf("property or node or right parenthesis expected here (position: %d). Found: %q", l.pos, l.peek())
+	return l.errorf("property or node or parenthesis expected here (position: %d). Found: %q", l.pos, l.peek())
 }
 
 // isSpace reports whether r is a space character.
