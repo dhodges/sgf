@@ -11,7 +11,7 @@ func verify(t *testing.T, field, fieldName, expected string) {
 	}
 }
 
-var gameInfoFixture = "(;" +
+var gameInfoString = "(;" +
 	"PB[Lee Sedol]BR[6p]BT[South Korea]" +
 	"PW[Gu Li]WR[9p]WT[China]RE[B+2]" +
 	"CA[UTF-8]" +
@@ -23,9 +23,11 @@ var gameInfoFixture = "(;" +
 	")"
 
 func TestParsingGameInfo(t *testing.T) {
-	sgf := new(SGFGame)
-
-	sgf.Parse(gameInfoFixture)
+	sgf, err := parseString(gameInfoString)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	sgi := &sgf.gameInfo
 
 	verify(t, sgi.black.name, "black player", "Lee Sedol")
@@ -71,13 +73,13 @@ func TestParsingGameInfo(t *testing.T) {
 }
 
 func TestParsingFullGameInfo(t *testing.T) {
-	buf, err := sgf_fixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
+	sgf, err := parseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	sgi := new(SGFGame).Parse(string(buf)).gameInfo
+	sgi := sgf.gameInfo
 
 	verify(t, sgi.black.name, "black player", "Go Seigen")
 	verify(t, sgi.black.rank, "black player rank", "5p")

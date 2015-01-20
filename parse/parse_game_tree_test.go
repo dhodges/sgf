@@ -11,7 +11,7 @@ func errorUnlessStrEqual(t *testing.T, found string, expected string, errMsg str
 	}
 }
 
-var gameTreeFixture = "(" +
+var gameTreeString = "(" +
 	";PB[Lee Sedol]BR[6p]BT[South Korea]PW[Gu Li]WR[9p]WT[China]RE[B+2]" +
 	";B[qc]C[At that time, Go Seigen was just 20 years' old...]" +
 	";W[cd]" +
@@ -22,7 +22,11 @@ var gameTreeFixture = "(" +
 	")"
 
 func TestParsingGameTree(t *testing.T) {
-	sgf := new(SGFGame).Parse(gameTreeFixture)
+	sgf, err := parseString(gameTreeString)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
 	if sgf.NodeCount() != 6 {
 		t.Errorf("game tree is incorrect, found %d nodes, expected 6", sgf.NodeCount())
@@ -48,13 +52,11 @@ func TestParsingGameTree(t *testing.T) {
 }
 
 func TestParsingFullGameTree(t *testing.T) {
-	buf, err := sgf_fixture("2014.07.06_WAGC-Rd1-Lithuania-Canada-var.sgf")
+	sgf, err := parseFixture("2014.07.06_WAGC-Rd1-Lithuania-Canada-var.sgf")
 	if err != nil {
 		t.Error(err)
 		return
 	}
-
-	sgf := new(SGFGame).Parse(string(buf))
 
 	nodeCount := sgf.NodeCount()
 
