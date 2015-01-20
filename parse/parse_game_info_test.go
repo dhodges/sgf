@@ -2,7 +2,6 @@ package parse
 
 import (
 	"fmt"
-	"io/ioutil"
 	"testing"
 )
 
@@ -72,7 +71,7 @@ func TestParsingGameInfo(t *testing.T) {
 }
 
 func TestParsingFullGameInfo(t *testing.T) {
-	buf, err := ioutil.ReadFile("../fixtures/sgf_files/19331016-Honinbo_Shusai-Go_Seigen.sgf")
+	buf, err := sgf_fixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
 	if err != nil {
 		t.Error(err.Error)
 		return

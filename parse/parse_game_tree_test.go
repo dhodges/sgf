@@ -2,7 +2,6 @@ package parse
 
 import (
 	"fmt"
-	"io/ioutil"
 	"testing"
 )
 
@@ -49,7 +48,7 @@ func TestParsingGameTree(t *testing.T) {
 }
 
 func TestParsingFullGameTree(t *testing.T) {
-	buf, err := ioutil.ReadFile("../fixtures/sgf_files/2014.07.06_WAGC-Rd1-Lithuania-Canada-var.sgf")
+	buf, err := sgf_fixture("2014.07.06_WAGC-Rd1-Lithuania-Canada-var.sgf")
 	if err != nil {
 		t.Error(err.Error)
 		return
