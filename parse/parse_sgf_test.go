@@ -3,27 +3,8 @@ package parse
 import (
 	"fmt"
 	"io/ioutil"
-	"strings"
 	"testing"
 )
-
-func listSgfFiles(dirname string) ([]string, error) {
-	var fileList []string
-	dirname = strings.TrimSpace(dirname)
-	if dirname[len(dirname)-1] != '/' {
-		dirname = dirname + "/"
-	}
-	fileInfoList, err := ioutil.ReadDir(dirname)
-	if err != nil {
-		return fileList, err
-	}
-	for _, fileInfo := range fileInfoList {
-		if !fileInfo.IsDir() {
-			fileList = append(fileList, dirname+fileInfo.Name())
-		}
-	}
-	return fileList, err
-}
 
 func TestParsingSGF(t *testing.T) {
 	dirname := "/Users/david/Google Drive/SGF/AWAGC-2014"
