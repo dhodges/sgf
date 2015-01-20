@@ -73,7 +73,7 @@ func TestParsingGameInfo(t *testing.T) {
 func TestParsingFullGameInfo(t *testing.T) {
 	buf, err := sgf_fixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
 	if err != nil {
-		t.Error(err.Error)
+		t.Error(err)
 		return
 	}
 

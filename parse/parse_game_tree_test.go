@@ -50,7 +50,7 @@ func TestParsingGameTree(t *testing.T) {
 func TestParsingFullGameTree(t *testing.T) {
 	buf, err := sgf_fixture("2014.07.06_WAGC-Rd1-Lithuania-Canada-var.sgf")
 	if err != nil {
-		t.Error(err.Error)
+		t.Error(err)
 		return
 	}
 
@@ -64,7 +64,7 @@ func TestParsingFullGameTree(t *testing.T) {
 
 	node, err := sgf.NthNode(7)
 	if err != nil {
-		t.Error(err.Error)
+		t.Error(err)
 		return
 	}
 
