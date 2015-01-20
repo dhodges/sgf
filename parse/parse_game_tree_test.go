@@ -75,5 +75,4 @@ func TestParsingFullGameTree(t *testing.T) {
 	if len(node.variations) != 3 {
 		t.Error(fmt.Sprintf("wrong number of variations: expected 3, found '%d'", len(node.variations)))
 	}
-
 }
