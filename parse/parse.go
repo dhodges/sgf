@@ -12,32 +12,34 @@ type PlayerInfo struct {
 	team string
 }
 
-type GameInfo struct {
-	black             PlayerInfo
-	white             PlayerInfo
-	result            string
-	komi              string
-	handicap          string
-	timeLimits        string
-	date              string
-	event             string
-	round             string
-	place             string
-	rules             string
-	gameName          string
-	opening           string
-	overtime          string
-	gameInfo          string
-	comment           string
-	source            string
-	user              string
-	annotator         string
-	annotation        string
-	copyright         string
-	charset           string
-	boardsize         string
-	unknownProperties []Property
-}
+type GameInfo map[string]string
+
+const BlackPlayerName = "PB"
+const BlackPlayerRank = "BR"
+const BlackPlayerTeam = "BT"
+const WhitePlayerName = "PW"
+const WhitePlayerRank = "WR"
+const WhitePlayerTeam = "WT"
+const Annotator = "AN"
+const Copyright = "CP"
+const Date = "DT"
+const Event = "EV"
+const GameComment = "GC"
+const Comment = "C"
+const GameName = "GN"
+const Handicap = "HA"
+const Opening = "ON"
+const Overtime = "OT"
+const Place = "PC"
+const Result = "RE"
+const Round = "RO"
+const Rules = "RU"
+const Source = "SO"
+const TimeLimits = "TM"
+const User = "US"
+const Charset = "CA"
+const Boardsize = "SZ"
+const Komi = "KM"
 
 type Property struct {
 	name  string
@@ -100,63 +102,12 @@ type SGFGame struct {
 }
 
 func (gi *GameInfo) AddProperty(prop Property) {
-	value := prop.value
-	switch prop.name {
-	case "PB":
-		gi.black.name = value
-	case "BR":
-		gi.black.rank = value
-	case "BT":
-		gi.black.team = value
-	case "PW":
-		gi.white.name = value
-	case "WR":
-		gi.white.rank = value
-	case "WT":
-		gi.white.team = value
-	case "AN":
-		gi.annotator = value
-	case "CP":
-		gi.copyright = value
-	case "DT":
-		gi.date = value
-	case "EV":
-		gi.event = value
-	case "GC":
-		gi.gameInfo = value
-	case "C":
-		gi.comment = value
-	case "GN":
-		gi.gameName = value
-	case "HA":
-		gi.handicap = value
-	case "ON":
-		gi.opening = value
-	case "OT":
-		gi.overtime = value
-	case "PC":
-		gi.place = value
-	case "RE":
-		gi.result = value
-	case "RO":
-		gi.round = value
-	case "RU":
-		gi.rules = value
-	case "SO":
-		gi.source = value
-	case "TM":
-		gi.timeLimits = value
-	case "US":
-		gi.user = value
-	case "CA":
-		gi.charset = value
-	case "SZ":
-		gi.boardsize = value
-	case "KM":
-		gi.komi = value
-	default:
-		gi.unknownProperties = append(gi.unknownProperties, prop)
-	}
+	gi.properties[strings.ToUpper(prop.name)] = prop.value
+}
+
+func (gi *GameInfo) GetProperty(name string) (value string, ok bool) {
+	value, ok = gi.properties[strings.ToUpper(name)]
+	return value, ok
 }
 
 func (sgf *SGFGame) NodeCount() int {
