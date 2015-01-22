@@ -31,37 +31,10 @@ func TestParsingGameInfo(t *testing.T) {
 		return
 	}
 
-	verify(t, sgf, BlackPlayerName, "Lee Sedol")
-	verify(t, sgf, BlackPlayerRank, "6p")
-	verify(t, sgf, BlackPlayerTeam, "South Korea")
-
-	verify(t, sgf, WhitePlayerName, "Gu Li")
-	verify(t, sgf, WhitePlayerRank, "9p")
-	verify(t, sgf, WhitePlayerTeam, "China")
-
-	verify(t, sgf, Annotator, "bob")
-	verify(t, sgf, Copyright, "Copyright")
-	verify(t, sgf, Event, "Pewter Cup")
-	verify(t, sgf, GameComment, "it was long")
-	verify(t, sgf, Date, "2014-12-25,26")
-	verify(t, sgf, GameName, "sally")
-	verify(t, sgf, Handicap, "4")
-
-	verify(t, sgf, Opening, "low Chinese")
-	verify(t, sgf, Overtime, "byo-yomi")
-	verify(t, sgf, Place, "Seoul")
-
-	verify(t, sgf, Result, "B+2")
-	verify(t, sgf, Round, "03 (final)")
-	verify(t, sgf, Rules, "Japanese")
-	verify(t, sgf, Source, "book")
-	verify(t, sgf, TimeLimits, "1000")
-	verify(t, sgf, User, "bill")
-
-	verify(t, sgf, "charset", "UTF-8")
-
-	verify(t, sgf, "ZZ", "zulu zimbabwe")
-	verify(t, sgf, "YY", "yello yulambi")
+	expected := "(;AN[bob]BR[6p]BT[South Korea]CA[UTF-8]CP[Copyright]DT[2014-12-25,26]EV[Pewter Cup]GC[it was long]GN[sally]HA[4]ON[low Chinese]OT[byo-yomi]PB[Lee Sedol]PC[Seoul]PW[Gu Li]RE[B+2]RO[03 (final)]RU[Japanese]SO[book]TM[1000]US[bill]WR[9p]WT[China]YY[yello yulambi]ZZ[zulu zimbabwe])"
+	if sgf.String() != expected {
+		t.Error(fmt.Sprintf("invalid gameInfo, found: %q, expected: %q", sgf.String(), expected))
+	}
 }
 
 func TestParsingFullGameInfo(t *testing.T) {
@@ -71,19 +44,11 @@ func TestParsingFullGameInfo(t *testing.T) {
 		return
 	}
 
-	verify(t, sgf, "BlackPlayerName", "Go Seigen")
-	verify(t, sgf, "BlackPlayerRank", "5p")
-
-	verify(t, sgf, "WhitePlayerName", "Honinbo Shusai")
-	verify(t, sgf, "WhitePlayerRank", "9p")
-
-	verify(t, sgf, "Charset", "UTF-8")
-	verify(t, sgf, "BoardSize", "19")
-	verify(t, sgf, "Event", "The Game of the Century")
-	verify(t, sgf, "Date", "1933-10-16")
-	verify(t, sgf, "Place", "Tokyo, Japan")
-	verify(t, sgf, "Result", "W+2")
-	verify(t, sgf, "Komi", "0")
+	found := sgf.gameInfo.String()[0:22]
+	expected := ";BR[5p]C[This match wa"
+	if found != expected {
+		t.Error(fmt.Sprintf("invalid gameInfo, found: %q, expected: %q)", found, expected))
+	}
 
 	foundComment, _ := sgf.GetProperty(Comment)
 	expectedComment := "This match was sponsored by"

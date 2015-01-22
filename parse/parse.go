@@ -3,6 +3,7 @@ package parse
 import (
 	"errors"
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -60,7 +61,7 @@ func (point *Point) String() string {
 	return fmt.Sprintf("[%c%c]", point.x, point.y)
 }
 
-func (node *Node) String() string {
+func (node Node) String() string {
 	attrs := []string{}
 	attrs = append(attrs, node.point.String())
 	for ndx := 0; ndx < len(node.properties); ndx += 1 {
@@ -102,6 +103,32 @@ func (sgf *SGFGame) AddProperty(prop Property) {
 func (sgf *SGFGame) GetProperty(name string) (value string, ok bool) {
 	value, ok = sgf.gameInfo[strings.ToUpper(name)]
 	return value, ok
+}
+
+func (gi GameInfo) String() string {
+	var keys sort.StringSlice
+	for k, _ := range gi {
+		keys = append(keys, k)
+	}
+	sort.Sort(keys)
+
+	infoString := ""
+	for _, k := range keys {
+		infoString = infoString + k + "[" + gi[k] + "]"
+	}
+	return ";" + infoString
+}
+
+func (sgf *SGFGame) GameTreeString() string {
+	treeString := ""
+	for node := sgf.gameTree; node != nil; node = node.next {
+		treeString = treeString + ";" + node.String()
+	}
+	return treeString
+}
+
+func (sgf *SGFGame) String() string {
+	return "(" + sgf.gameInfo.String() + sgf.GameTreeString() + ")"
 }
 
 func (sgf *SGFGame) NodeCount() int {
