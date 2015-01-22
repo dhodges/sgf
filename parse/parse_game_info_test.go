@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func verify(t *testing.T, sgi *GameInfo, propertyName, expected string) {
-	value, _ := sgi.GetProperty(propertyName)
+func verify(t *testing.T, sgf *SGFGame, propertyName, expected string) {
+	value, _ := sgf.gameInfo[propertyName]
 
 	if value != expected {
 		t.Error(fmt.Sprintf("invalid property: '%s' (found: '%s', expected: '%s')", propertyName, value, expected))
@@ -30,39 +30,38 @@ func TestParsingGameInfo(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	sgi := &sgf.gameInfo
 
-	verify(t, sgi, BlackPlayerName, "Lee Sedol")
-	verify(t, sgi, BlackPlayerRank, "6p")
-	verify(t, sgi, BlackPlayerTeam, "South Korea")
+	verify(t, sgf, BlackPlayerName, "Lee Sedol")
+	verify(t, sgf, BlackPlayerRank, "6p")
+	verify(t, sgf, BlackPlayerTeam, "South Korea")
 
-	verify(t, sgi, WhitePlayerName, "Gu Li")
-	verify(t, sgi, WhitePlayerRank, "9p")
-	verify(t, sgi, WhitePlayerTeam, "China")
+	verify(t, sgf, WhitePlayerName, "Gu Li")
+	verify(t, sgf, WhitePlayerRank, "9p")
+	verify(t, sgf, WhitePlayerTeam, "China")
 
-	verify(t, sgi, Annotator, "bob")
-	verify(t, sgi, Copyright, "Copyright")
-	verify(t, sgi, Event, "Pewter Cup")
-	verify(t, sgi, GameComment, "it was long")
-	verify(t, sgi, Date, "2014-12-25,26")
-	verify(t, sgi, GameName, "sally")
-	verify(t, sgi, Handicap, "4")
+	verify(t, sgf, Annotator, "bob")
+	verify(t, sgf, Copyright, "Copyright")
+	verify(t, sgf, Event, "Pewter Cup")
+	verify(t, sgf, GameComment, "it was long")
+	verify(t, sgf, Date, "2014-12-25,26")
+	verify(t, sgf, GameName, "sally")
+	verify(t, sgf, Handicap, "4")
 
-	verify(t, sgi, Opening, "low Chinese")
-	verify(t, sgi, Overtime, "byo-yomi")
-	verify(t, sgi, Place, "Seoul")
+	verify(t, sgf, Opening, "low Chinese")
+	verify(t, sgf, Overtime, "byo-yomi")
+	verify(t, sgf, Place, "Seoul")
 
-	verify(t, sgi, Result, "B+2")
-	verify(t, sgi, Round, "03 (final)")
-	verify(t, sgi, Rules, "Japanese")
-	verify(t, sgi, Source, "book")
-	verify(t, sgi, TimeLimits, "1000")
-	verify(t, sgi, User, "bill")
+	verify(t, sgf, Result, "B+2")
+	verify(t, sgf, Round, "03 (final)")
+	verify(t, sgf, Rules, "Japanese")
+	verify(t, sgf, Source, "book")
+	verify(t, sgf, TimeLimits, "1000")
+	verify(t, sgf, User, "bill")
 
-	verify(t, sgi, "charset", "UTF-8")
+	verify(t, sgf, "charset", "UTF-8")
 
-	verify(t, sgi, "ZZ", "zulu zimbabwe")
-	verify(t, sgi, "YY", "yello yulambi")
+	verify(t, sgf, "ZZ", "zulu zimbabwe")
+	verify(t, sgf, "YY", "yello yulambi")
 }
 
 func TestParsingFullGameInfo(t *testing.T) {
@@ -72,23 +71,21 @@ func TestParsingFullGameInfo(t *testing.T) {
 		return
 	}
 
-	sgi := &sgf.gameInfo
+	verify(t, sgf, "BlackPlayerName", "Go Seigen")
+	verify(t, sgf, "BlackPlayerRank", "5p")
 
-	verify(t, sgi, "BlackPlayerName", "Go Seigen")
-	verify(t, sgi, "BlackPlayerRank", "5p")
+	verify(t, sgf, "WhitePlayerName", "Honinbo Shusai")
+	verify(t, sgf, "WhitePlayerRank", "9p")
 
-	verify(t, sgi, "WhitePlayerName", "Honinbo Shusai")
-	verify(t, sgi, "WhitePlayerRank", "9p")
+	verify(t, sgf, "Charset", "UTF-8")
+	verify(t, sgf, "BoardSize", "19")
+	verify(t, sgf, "Event", "The Game of the Century")
+	verify(t, sgf, "Date", "1933-10-16")
+	verify(t, sgf, "Place", "Tokyo, Japan")
+	verify(t, sgf, "Result", "W+2")
+	verify(t, sgf, "Komi", "0")
 
-	verify(t, sgi, "Charset", "UTF-8")
-	verify(t, sgi, "BoardSize", "19")
-	verify(t, sgi, "Event", "The Game of the Century")
-	verify(t, sgi, "Date", "1933-10-16")
-	verify(t, sgi, "Place", "Tokyo, Japan")
-	verify(t, sgi, "Result", "W+2")
-	verify(t, sgi, "Komi", "0")
-
-	foundComment, _ := sgi.GetProperty(Comment)
+	foundComment, _ := sgf.GetProperty(Comment)
 	expectedComment := "This match was sponsored by"
 
 	if foundComment[0:27] != expectedComment {

@@ -21,6 +21,7 @@ Loop:
 			return
 		}
 		sgf := new(SGFGame)
+		sgf.gameInfo = map[string]string{}
 		sgf.Parse(string(buf))
 		if len(sgf.errors) > 0 {
 			fmt.Printf("problems parsing file: %q\n", fname)
@@ -32,6 +33,7 @@ Loop:
 
 func TestSGFErrors(t *testing.T) {
 	sgf := new(SGFGame)
+	sgf.gameInfo = map[string]string{}
 	sgf.AddError("hells belles")
 	sgf.AddError("hades' ladies")
 	if len(sgf.errors) != 2 {

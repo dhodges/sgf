@@ -6,12 +6,6 @@ import (
 	"strings"
 )
 
-type PlayerInfo struct {
-	name string
-	rank string
-	team string
-}
-
 type GameInfo map[string]string
 
 const BlackPlayerName = "PB"
@@ -101,12 +95,12 @@ type SGFGame struct {
 	errors   []error
 }
 
-func (gi *GameInfo) AddProperty(prop Property) {
-	gi.properties[strings.ToUpper(prop.name)] = prop.value
+func (sgf *SGFGame) AddProperty(prop Property) {
+	sgf.gameInfo[strings.ToUpper(prop.name)] = prop.value
 }
 
-func (gi *GameInfo) GetProperty(name string) (value string, ok bool) {
-	value, ok = gi.properties[strings.ToUpper(name)]
+func (sgf *SGFGame) GetProperty(name string) (value string, ok bool) {
+	value, ok = sgf.gameInfo[strings.ToUpper(name)]
 	return value, ok
 }
 
@@ -179,7 +173,7 @@ Loop:
 		case itemPropertyValue:
 			prop.value = i.val
 			if parsingSetup {
-				sgf.gameInfo.AddProperty(prop)
+				sgf.AddProperty(prop)
 			} else {
 				currentNode.AddProperty(prop)
 			}

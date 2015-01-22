@@ -45,6 +45,7 @@ func listSgfFiles(dirname string) ([]string, error) {
 
 func parseString(str string) (sgf *SGFGame, err error) {
 	sgf = new(SGFGame)
+	sgf.gameInfo = map[string]string{}
 	sgf.Parse(str)
 	if len(sgf.errors) > 0 {
 		return nil, errors.New(fmt.Sprintf("problems parsing sgf: %q", sgf.errors[0]))
