@@ -45,3 +45,20 @@ func TestSGFtoString(t *testing.T) {
 		t.Error(fmt.Sprintf("error writing SGF to string. \n   found: %q \nexpected: %q", sgf.String(), variant_sgf_1))
 	}
 }
+
+func TestVariationsToString(t *testing.T) {
+	gameStr := "(;GM[1];B[dp]" +
+		"(;W[ef];B[cf](;W[fc];B[dc](;W[pf];B[qk])(;W[rl];B[qg];W[sl]));W[eh];B[ec])" +
+		";W[ee])"
+
+	sgf, err := parseString(gameStr)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	sgfStr := sgf.String()
+	if sgfStr != gameStr {
+		t.Error(fmt.Sprintf("error writing SGF to string. \n   Found: %q, \nExpected: %q", sgfStr, gameStr))
+	}
+}

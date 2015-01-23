@@ -275,6 +275,8 @@ func lexRightParen(l *lexer) stateFn {
 		return lexPropertyName
 	case l.peek() == ')':
 		return lexRightParen
+	case l.peek() == ';':
+		return lexSemiColon
 	default:
 		l.emit(itemEOF)
 		return nil

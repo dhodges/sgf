@@ -32,13 +32,35 @@ type Node struct {
 	next       *Node
 }
 
-func (node Node) String() string {
+func (node Node) variationString() string {
+	if len(node.variations) == 0 {
+		return ""
+	}
+
 	str := ""
-	str = str + node.point.String()
+	for _, nodevar := range node.variations {
+		nodestr := ""
+		for nptr := nodevar; nptr != nil; nptr = nptr.next {
+			nodestr = nodestr + nptr.String()
+		}
+		str = str + "(" + nodestr + ")"
+	}
+	return str
+}
+
+func (node Node) propertiesString() string {
+	str := ""
 	for _, prop := range node.properties {
 		str = str + prop.String()
 	}
-	return str + node.variationString()
+	return str
+}
+
+func (node Node) String() string {
+	return ";" +
+		node.point.String() +
+		node.propertiesString() +
+		node.variationString()
 }
 
 func (node *Node) AddProperty(prop Property) {
@@ -125,7 +147,7 @@ func (sgf *SGFGame) GetProperty(name string) (value string, ok bool) {
 func (sgf SGFGame) GameTreeString() string {
 	treeString := ""
 	for node := sgf.gameTree; node != nil; node = node.next {
-		treeString = treeString + ";" + node.String()
+		treeString = treeString + node.String()
 	}
 	return treeString
 }
@@ -166,7 +188,7 @@ func (sgf SGFGame) showAnyErrors() {
 		return
 	}
 
-	fmt.Println("Parsing errors:\n")
+	fmt.Println("Parsing errors:")
 	for _, err := range sgf.errors {
 		fmt.Println(err)
 	}
@@ -177,7 +199,6 @@ func (sgf *SGFGame) Parse(input string) *SGFGame {
 	l := lex(input)
 	prop := Property{}
 	parsingSetup := false
-	parsingGame := false
 	nodeStack := new(Stack)
 
 Loop:
@@ -185,29 +206,35 @@ Loop:
 		i := l.nextItem()
 		switch i.typ {
 		case itemLeftParen:
-			if parsingGame {
-				nodeStack.Push(currentNode)
-				currentNode = currentNode.NewVariation()
+			if parsingSetup {
+				sgf.AddError(fmt.Sprintf("unexpected left parenthesis (position %d): %q", l.pos, l.quoteContext()))
+				break Loop
+			} else {
+				if len(sgf.gameInfo) == 0 {
+					parsingSetup = true
+				} else {
+					nodeStack.Push(currentNode)
+					currentNode = currentNode.NewVariation()
+					if l.nextItem().typ != itemSemiColon {
+						sgf.AddError(fmt.Sprintf("semi-colon expected here (position %d): %q", l.pos, l.quoteContext()))
+						break Loop
+					}
+				}
 			}
 		case itemRightParen:
-			if parsingGame {
-				node := nodeStack.Pop()
-				if node != nil {
-					currentNode = node.(*Node)
-				}
+			node := nodeStack.Pop()
+			if node != nil {
+				currentNode = node.(*Node)
 			}
 		case itemSemiColon:
-			if !parsingSetup && !parsingGame {
-				parsingSetup = true
-			} else {
-				if !parsingGame {
+			if parsingSetup {
+				if len(sgf.gameInfo) > 0 {
 					parsingSetup = false
-					parsingGame = true
 					sgf.gameTree = new(Node)
 					currentNode = sgf.gameTree
-				} else {
-					currentNode = currentNode.NewNode()
 				}
+			} else {
+				currentNode = currentNode.NewNode()
 			}
 		case itemPropertyName:
 			prop = Property{i.val, ""}
