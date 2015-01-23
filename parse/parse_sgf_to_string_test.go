@@ -42,6 +42,6 @@ func TestSGFtoString(t *testing.T) {
 	}
 
 	if sgf.String() != variant_sgf_1 {
-		t.Error(fmt.Sprintf("error writing SGF to string. Found: %q, expected: %q", sgf.String(), variant_sgf_1))
+		t.Error(fmt.Sprintf("error writing SGF to string. \n   found: %q \nexpected: %q", sgf.String(), variant_sgf_1))
 	}
 }

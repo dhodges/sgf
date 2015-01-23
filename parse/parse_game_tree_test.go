@@ -71,10 +71,10 @@ func TestParsingFullGameTree(t *testing.T) {
 	}
 
 	if node.point.String() != "B[hd]" {
-		t.Error(fmt.Sprintf("wrong node: expected 'B[hd]', found '%s'", node.point))
+		t.Error(fmt.Sprintf("wrong node: expected \"B[hd]\", found %q", node.point))
 	}
 
 	if len(node.variations) != 3 {
-		t.Error(fmt.Sprintf("wrong number of variations: expected 3, found '%d'", len(node.variations)))
+		t.Error(fmt.Sprintf("wrong number of variations: expected 3, found %d", len(node.variations)))
 	}
 }

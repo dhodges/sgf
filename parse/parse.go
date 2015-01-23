@@ -7,7 +7,59 @@ import (
 	"strings"
 )
 
-type GameInfo map[string]string
+type Property struct {
+	name  string
+	value string
+}
+
+func (p Property) String() string {
+	return fmt.Sprintf("%s[%s]", p.name, p.value)
+}
+
+type Point struct {
+	x rune
+	y rune
+}
+
+func (point Point) String() string {
+	return fmt.Sprintf("[%c%c]", point.x, point.y)
+}
+
+type Node struct {
+	point      Property
+	properties []Property
+	variations []*Node
+	next       *Node
+}
+
+func (node Node) String() string {
+	str := ""
+	str = str + node.point.String()
+	for _, prop := range node.properties {
+		str = str + prop.String()
+	}
+	return str + node.variationString()
+}
+
+func (node *Node) AddProperty(prop Property) {
+	switch prop.name {
+	case "B", "W":
+		node.point = prop
+	default:
+		node.properties = append(node.properties, prop)
+	}
+}
+
+func (node *Node) NewNode() *Node {
+	node.next = new(Node)
+	return node.next
+}
+
+func (n *Node) NewVariation() *Node {
+	node := new(Node)
+	n.variations = append(n.variations, node)
+	return node
+}
 
 const BlackPlayerName = "PB"
 const BlackPlayerRank = "BR"
@@ -36,74 +88,7 @@ const Charset = "CA"
 const Boardsize = "SZ"
 const Komi = "KM"
 
-type Property struct {
-	name  string
-	value string
-}
-
-func (p Property) String() string {
-	return fmt.Sprintf("%s[%s]", p.name, p.value)
-}
-
-type Point struct {
-	x rune
-	y rune
-}
-
-type Node struct {
-	point      Property
-	properties []Property
-	variations []*Node
-	next       *Node
-}
-
-func (point *Point) String() string {
-	return fmt.Sprintf("[%c%c]", point.x, point.y)
-}
-
-func (node Node) String() string {
-	attrs := []string{}
-	attrs = append(attrs, node.point.String())
-	for ndx := 0; ndx < len(node.properties); ndx += 1 {
-		attrs = append(attrs, node.properties[ndx].String())
-	}
-	return strings.Join(attrs, "")
-}
-
-func (node *Node) AddProperty(prop Property) {
-	switch prop.name {
-	case "B", "W":
-		node.point = prop
-	default:
-		node.properties = append(node.properties, prop)
-	}
-}
-
-func (node *Node) NewNode() *Node {
-	node.next = new(Node)
-	return node.next
-}
-
-func (n *Node) NewVariation() *Node {
-	node := new(Node)
-	n.variations = append(n.variations, node)
-	return node
-}
-
-type SGFGame struct {
-	gameInfo GameInfo
-	gameTree *Node
-	errors   []error
-}
-
-func (sgf *SGFGame) AddProperty(prop Property) {
-	sgf.gameInfo[strings.ToUpper(prop.name)] = prop.value
-}
-
-func (sgf *SGFGame) GetProperty(name string) (value string, ok bool) {
-	value, ok = sgf.gameInfo[strings.ToUpper(name)]
-	return value, ok
-}
+type GameInfo map[string]string
 
 func (gi GameInfo) SortedKeys() []string {
 	var keys sort.StringSlice
@@ -122,7 +107,22 @@ func (gi GameInfo) String() string {
 	return ";" + str
 }
 
-func (sgf *SGFGame) GameTreeString() string {
+type SGFGame struct {
+	gameInfo GameInfo
+	gameTree *Node
+	errors   []error
+}
+
+func (sgf *SGFGame) AddProperty(prop Property) {
+	sgf.gameInfo[strings.ToUpper(prop.name)] = prop.value
+}
+
+func (sgf *SGFGame) GetProperty(name string) (value string, ok bool) {
+	value, ok = sgf.gameInfo[strings.ToUpper(name)]
+	return value, ok
+}
+
+func (sgf SGFGame) GameTreeString() string {
 	treeString := ""
 	for node := sgf.gameTree; node != nil; node = node.next {
 		treeString = treeString + ";" + node.String()
@@ -130,11 +130,11 @@ func (sgf *SGFGame) GameTreeString() string {
 	return treeString
 }
 
-func (sgf *SGFGame) String() string {
+func (sgf SGFGame) String() string {
 	return "(" + sgf.gameInfo.String() + sgf.GameTreeString() + ")"
 }
 
-func (sgf *SGFGame) NodeCount() int {
+func (sgf SGFGame) NodeCount() int {
 	count := 0
 	for node := sgf.gameTree; node != nil; node = node.next {
 		count += 1
@@ -142,7 +142,7 @@ func (sgf *SGFGame) NodeCount() int {
 	return count
 }
 
-func (sgf *SGFGame) NthNode(n int) (node *Node, err error) {
+func (sgf SGFGame) NthNode(n int) (node *Node, err error) {
 	if n < 1 {
 		return nil, errors.New("n less than 1")
 	}

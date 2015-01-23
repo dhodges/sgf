@@ -167,6 +167,7 @@ func (l *lexer) quoteContext() string {
 	if end >= len(l.input) {
 		end = len(l.input) - 1
 	}
+	// TODO: is there a unicode 'cursor' glyph?
 	return l.input[start:l.pos] + "|" + l.input[l.pos:end]
 }
 
