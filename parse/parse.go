@@ -105,18 +105,21 @@ func (sgf *SGFGame) GetProperty(name string) (value string, ok bool) {
 	return value, ok
 }
 
-func (gi GameInfo) String() string {
+func (gi GameInfo) SortedKeys() []string {
 	var keys sort.StringSlice
 	for k, _ := range gi {
 		keys = append(keys, k)
 	}
 	sort.Sort(keys)
+	return keys
+}
 
-	infoString := ""
-	for _, k := range keys {
-		infoString = infoString + k + "[" + gi[k] + "]"
+func (gi GameInfo) String() string {
+	str := ""
+	for _, k := range gi.SortedKeys() {
+		str = str + k + "[" + gi[k] + "]"
 	}
-	return ";" + infoString
+	return ";" + str
 }
 
 func (sgf *SGFGame) GameTreeString() string {
