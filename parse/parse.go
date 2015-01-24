@@ -41,9 +41,9 @@ func (node Node) variationString() string {
 	for _, nodevar := range node.variations {
 		nodestr := ""
 		for nptr := nodevar; nptr != nil; nptr = nptr.next {
-			nodestr = nodestr + nptr.String()
+			nodestr += nptr.String()
 		}
-		str = str + "(" + nodestr + ")"
+		str += "(" + nodestr + ")"
 	}
 	return str
 }
@@ -51,7 +51,7 @@ func (node Node) variationString() string {
 func (node Node) propertiesString() string {
 	str := ""
 	for _, prop := range node.properties {
-		str = str + prop.String()
+		str += prop.String()
 	}
 	return str
 }
@@ -124,7 +124,7 @@ func (gi GameInfo) SortedKeys() []string {
 func (gi GameInfo) String() string {
 	str := ""
 	for _, k := range gi.SortedKeys() {
-		str = str + k + "[" + gi[k] + "]"
+		str += k + "[" + gi[k] + "]"
 	}
 	return ";" + str
 }
@@ -147,7 +147,7 @@ func (sgf *SGFGame) GetProperty(name string) (value string, ok bool) {
 func (sgf SGFGame) GameTreeString() string {
 	treeString := ""
 	for node := sgf.gameTree; node != nil; node = node.next {
-		treeString = treeString + node.String()
+		treeString += node.String()
 	}
 	return treeString
 }
