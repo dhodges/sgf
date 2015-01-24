@@ -135,11 +135,11 @@ type SGFGame struct {
 	errors   []error
 }
 
-func (sgf *SGFGame) AddProperty(prop Property) {
+func (sgf *SGFGame) AddInfo(prop Property) {
 	sgf.gameInfo[strings.ToUpper(prop.name)] = prop.value
 }
 
-func (sgf *SGFGame) GetProperty(name string) (value string, ok bool) {
+func (sgf *SGFGame) GetInfo(name string) (value string, ok bool) {
 	value, ok = sgf.gameInfo[strings.ToUpper(name)]
 	return value, ok
 }
@@ -241,7 +241,7 @@ Loop:
 		case itemPropertyValue:
 			prop.value = i.val
 			if parsingSetup {
-				sgf.AddProperty(prop)
+				sgf.AddInfo(prop)
 			} else {
 				currentNode.AddProperty(prop)
 			}

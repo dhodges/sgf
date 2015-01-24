@@ -50,10 +50,14 @@ func TestParsingFullGameInfo(t *testing.T) {
 		t.Error(fmt.Sprintf("invalid gameInfo, found: %q, expected: %q)", found, expected))
 	}
 
-	foundComment, _ := sgf.GetProperty(Comment)
+	foundComment, _ := sgf.GetInfo(Comment)
 	expectedComment := "This match was sponsored by"
 
 	if foundComment[0:27] != expectedComment {
 		t.Error(fmt.Sprintf("invalid comment (found: '%s', expected: '%s')", foundComment, expectedComment))
 	}
+
+	verify(t, sgf, Event, "The Game of the Century")
+	verify(t, sgf, BlackPlayerName, "Go Seigen")
+	verify(t, sgf, WhitePlayerName, "Honinbo Shusai")
 }
