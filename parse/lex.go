@@ -171,6 +171,10 @@ func (l *lexer) quoteContext() string {
 	return l.input[start:l.pos] + "|" + l.input[l.pos:end]
 }
 
+func (l *lexer) QuoteErrorContext(message string) string {
+	return fmt.Sprintf("%s, position %d, %q", message, l.pos, l.quoteContext())
+}
+
 // accept consumes the next rune if it's from the valid set.
 func (l *lexer) accept(valid string) bool {
 	if strings.IndexRune(valid, l.next()) >= 0 {
@@ -259,7 +263,7 @@ func lexLeftParen(l *lexer) stateFn {
 	l.pos += Pos(len("("))
 	l.emit(itemLeftParen)
 	if l.peek() != ';' {
-		return l.errorf("semi-colon expected here (position %d): %q", l.pos, l.quoteContext())
+		return l.errorf(l.QuoteErrorContext("semi-colon expected here"))
 	}
 	return lexSemiColon
 }
@@ -290,7 +294,7 @@ func lexSemiColon(l *lexer) stateFn {
 		l.advance()
 	}
 	if !isAlpha(l.peek()) {
-		return l.errorf("property expected here (position %d): %q", l.pos, l.quoteContext())
+		return l.errorf(l.QuoteErrorContext("property expected here"))
 	}
 	return lexPropertyName
 }
@@ -299,7 +303,7 @@ func lexPropertyName(l *lexer) stateFn {
 	l.acceptAlphaRun()
 	l.emit(itemPropertyName)
 	if (l.peek()) != '[' {
-		return l.errorf("left bracket '[' expected here (position %d): %q", l.pos, l.quoteContext())
+		return l.errorf(l.QuoteErrorContext("left bracket '[' expected here"))
 	}
 	return lexLeftBracket
 }

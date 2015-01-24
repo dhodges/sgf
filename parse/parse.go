@@ -207,7 +207,7 @@ Loop:
 		switch i.typ {
 		case itemLeftParen:
 			if parsingSetup {
-				sgf.AddError(fmt.Sprintf("unexpected left parenthesis (position %d): %q", l.pos, l.quoteContext()))
+				sgf.AddError(l.QuoteErrorContext("unexpected left parenthesis"))
 				break Loop
 			} else {
 				if len(sgf.gameInfo) == 0 {
@@ -216,7 +216,7 @@ Loop:
 					nodeStack.Push(currentNode)
 					currentNode = currentNode.NewVariation()
 					if l.nextItem().typ != itemSemiColon {
-						sgf.AddError(fmt.Sprintf("semi-colon expected here (position %d): %q", l.pos, l.quoteContext()))
+						sgf.AddError(l.QuoteErrorContext("semi-colon expected here"))
 						break Loop
 					}
 				}
