@@ -255,7 +255,6 @@ func lexBegin(l *lexer) stateFn {
 	return nil
 }
 
-// lexLeftParen scans the left parenthesis, which is known to be present.
 func lexLeftParen(l *lexer) stateFn {
 	l.pos += Pos(len("("))
 	l.emit(itemLeftParen)
@@ -265,7 +264,6 @@ func lexLeftParen(l *lexer) stateFn {
 	return lexSemiColon
 }
 
-// lexRightParen scans the right parenthesis, which is known to be present.
 func lexRightParen(l *lexer) stateFn {
 	l.pos += Pos(len(")"))
 	l.emit(itemRightParen)
@@ -283,7 +281,6 @@ func lexRightParen(l *lexer) stateFn {
 	}
 }
 
-// lexSemiColon scans the semicolon, which is known to be present.
 func lexSemiColon(l *lexer) stateFn {
 	l.pos += Pos(len(";"))
 	l.emit(itemSemiColon)
@@ -337,12 +334,10 @@ func lexLeftBracket(l *lexer) stateFn {
 	return l.errorf("property or node or parenthesis expected here (position: %d). Found: %q", l.pos, l.peek())
 }
 
-// isSpace reports whether r is a space character.
 func isSpace(r rune) bool {
 	return r == ' ' || r == '\t'
 }
 
-// isEndOfLine reports whether r is an end-of-line character.
 func isEndOfLine(r rune) bool {
 	return r == '\r' || r == '\n'
 }
@@ -351,12 +346,10 @@ func isWhiteSpace(r rune) bool {
 	return isSpace(r) || isEndOfLine(r)
 }
 
-// isAlpha reports whether r is an alphabetic
 func isAlpha(r rune) bool {
 	return unicode.IsLetter(r)
 }
 
-// isAlphaNumeric reports whether r is an alphabetic, digit, or underscore.
 func isAlphaNumeric(r rune) bool {
 	return r == '_' || unicode.IsLetter(r) || unicode.IsDigit(r)
 }
