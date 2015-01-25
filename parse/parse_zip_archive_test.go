@@ -36,3 +36,54 @@ func TestListingZipArchiveOnlySGFfiles(t *testing.T) {
 		t.Errorf("zip filelist is wrong: \nfound    %q \nexpected %q", sgfFileList[1], expected)
 	}
 }
+
+func TestParsingZipArchiveSGFfile(t *testing.T) {
+	zipArchive := zip_fixture_fpath("3_shusaku_games.zip")
+	sgf, err := ParseZipSGFfile(zipArchive, "1840/Ito_Showa-Kuwahara_Shusaku.sgf")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	foundName, _ := sgf.GetInfo(WhitePlayerName)
+	if foundName != "Ito Showa" {
+		t.Errorf("wrong white player name found: %q expected: Ito Showa", foundName)
+	}
+	foundName, _ = sgf.GetInfo(BlackPlayerName)
+	if foundName != "Kuwahara Shusaku" {
+		t.Errorf("wrong black player name found: %q expected: %q", foundName, "Kuwahara Shusaku")
+	}
+
+	if sgf.NodeCount() != 202 {
+		t.Errorf("wrong node count, found: %d, expected: 202", sgf.NodeCount())
+	}
+}
+
+func TestParsingZipArchiveAllSGFfiles(t *testing.T) {
+	zipArchive := zip_fixture_fpath("3_shusaku_games.zip")
+	games, err := ParseZipAllSGFfiles(zipArchive)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	if len(games) != 3 {
+		t.Errorf("wrong number of games, found: %d, expected 3", len(games))
+		return
+	}
+
+	foundDate, _ := games[0].GetInfo(Date)
+	if foundDate != "1840-03-14" {
+		t.Errorf("first game is incorrect, found %q, expected '1840-03-14'", foundDate)
+	}
+
+	foundName, _ := games[1].GetInfo(WhitePlayerName)
+	if foundName != "Ota Yuzo" {
+		t.Errorf("wrong white player name \nfound:   %q \nexpected: Ota Yuzo", foundName)
+	}
+
+	foundName, _ = games[2].GetInfo(WhitePlayerName)
+	if foundName != "Kadono Tadazaemon" {
+		t.Errorf("wrong white player name \nfound:   %q \nexpected: Kadono Tadazaemon", foundName)
+	}
+}
