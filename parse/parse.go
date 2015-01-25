@@ -183,17 +183,6 @@ func (sgf *SGFGame) AddError(msg string) {
 	sgf.errors = append(sgf.errors, errors.New(msg))
 }
 
-func (sgf SGFGame) showAnyErrors() {
-	if len(sgf.errors) == 0 {
-		return
-	}
-
-	fmt.Println("Parsing errors:")
-	for _, err := range sgf.errors {
-		fmt.Println(err)
-	}
-}
-
 func Parse(input string) (games []*SGFGame) {
 	var currentNode *Node
 	var sgf *SGFGame
@@ -263,6 +252,6 @@ Loop:
 			break Loop
 		}
 	}
-	sgf.showAnyErrors()
+
 	return
 }
