@@ -195,7 +195,7 @@ func (sgf SGFGame) showAnyErrors() {
 	}
 }
 
-func ListZipSGFfiles(fpath string) (fnames []string, err error) {
+func ListZipSGFfiles(fpath string) (fnames sort.StringSlice, err error) {
 	r, err := zip.OpenReader(fpath)
 	if err != nil {
 		return nil, err
@@ -203,10 +203,23 @@ func ListZipSGFfiles(fpath string) (fnames []string, err error) {
 	defer r.Close()
 
 	for _, f := range r.File {
-		fnames = append(fnames, f.Name)
+		fname := trim(f.Name)
+		if isSGFfileName(fname) {
+			fnames = append(fnames, fname)
+		}
 	}
-
+	sort.Sort(fnames)
 	return fnames, err
+}
+
+func trim(fname string) string {
+	return strings.Trim(fname, " ")
+}
+
+func isSGFfileName(fname string) bool {
+	fname = strings.ToLower(fname)
+	suffix := fname[len(fname)-3:]
+	return suffix == "sgf"
 }
 
 func (sgf *SGFGame) Parse(input string) *SGFGame {
