@@ -194,69 +194,7 @@ func (sgf SGFGame) showAnyErrors() {
 	}
 }
 
-func (sgf *SGFGame) Parse(input string) *SGFGame {
-	var currentNode *Node
-	l := lex(input)
-	prop := Property{}
-	parsingSetup := false
-	nodeStack := new(Stack)
-
-Loop:
-	for {
-		i := l.nextItem()
-		switch i.typ {
-		case itemLeftParen:
-			if parsingSetup {
-				sgf.AddError(l.QuoteErrorContext("unexpected left parenthesis"))
-				break Loop
-			} else {
-				if len(sgf.gameInfo) == 0 {
-					parsingSetup = true
-				} else {
-					nodeStack.Push(currentNode)
-					currentNode = currentNode.NewVariation()
-					if l.nextItem().typ != itemSemiColon {
-						sgf.AddError(l.QuoteErrorContext("semi-colon expected here"))
-						break Loop
-					}
-				}
-			}
-		case itemRightParen:
-			node := nodeStack.Pop()
-			if node != nil {
-				currentNode = node.(*Node)
-			}
-		case itemSemiColon:
-			if parsingSetup {
-				if len(sgf.gameInfo) > 0 {
-					parsingSetup = false
-					sgf.gameTree = new(Node)
-					currentNode = sgf.gameTree
-				}
-			} else {
-				currentNode = currentNode.NewNode()
-			}
-		case itemPropertyName:
-			prop = Property{i.val, ""}
-		case itemPropertyValue:
-			prop.value = i.val
-			if parsingSetup {
-				sgf.AddInfo(prop)
-			} else {
-				currentNode.AddProperty(prop)
-			}
-		case itemError:
-			sgf.AddError(i.val)
-			break Loop
-		case itemEOF:
-			break Loop
-		}
-	}
-	sgf.showAnyErrors()
-	return sgf
-}
-
-func ParseMultiple(input string) (games []*SGFGame) {
+func Parse(input string) (games []*SGFGame) {
 	var currentNode *Node
 	var sgf *SGFGame
 	l := lex(input)

@@ -20,12 +20,11 @@ Loop:
 			t.Errorf("Error reading file: %q, %q", fname, err.Error())
 			return
 		}
-		sgf := new(SGFGame)
-		sgf.gameInfo = make(GameInfo)
-		sgf.Parse(string(buf))
-		if len(sgf.errors) > 0 {
+
+		game := Parse(string(buf))[0]
+		if len(game.errors) > 0 {
 			fmt.Printf("problems parsing file: %q\n", fname)
-			fmt.Println(sgf.errors[0].Error())
+			fmt.Println(game.errors[0].Error())
 			break Loop
 		}
 	}

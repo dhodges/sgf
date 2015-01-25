@@ -9,7 +9,7 @@ func TestParseMultiple(t *testing.T) {
 		return
 	}
 
-	games := ParseMultiple(fixture)
+	games := Parse(fixture)
 	if len(games) != 259 {
 		t.Errorf("wrong number of games, found %d, expected 259", len(games))
 	}

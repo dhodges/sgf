@@ -22,17 +22,18 @@ var gameTreeString = "(" +
 	")"
 
 func TestParsingGameTree(t *testing.T) {
-	sgf, err := parseString(gameTreeString)
+	games, err := parseString(gameTreeString)
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	game := games[0]
 
-	if sgf.NodeCount() != 6 {
-		t.Errorf("game tree is incorrect, found %d nodes, expected 6", sgf.NodeCount())
+	if game.NodeCount() != 6 {
+		t.Errorf("game tree is incorrect, found %d nodes, expected 6", game.NodeCount())
 	}
 
-	node := sgf.gameTree
+	node := game.gameTree
 	errorUnlessStrEqual(t, node.point.String(), "B[qc]", "1st node move is incorrect")
 
 	node = node.next
@@ -52,19 +53,20 @@ func TestParsingGameTree(t *testing.T) {
 }
 
 func TestParsingFullGameTree(t *testing.T) {
-	sgf, err := parseFixture("2014.07.06_WAGC-Rd1-Lithuania-Canada-var.sgf")
+	games, err := parseFixture("2014.07.06_WAGC-Rd1-Lithuania-Canada-var.sgf")
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	game := games[0]
 
-	nodeCount := sgf.NodeCount()
+	nodeCount := game.NodeCount()
 
 	if nodeCount != 7 {
 		t.Error(fmt.Printf("wrong number of game nodes (expected 7, found %d)\n", nodeCount))
 	}
 
-	node, err := sgf.NthNode(7)
+	node, err := game.NthNode(7)
 	if err != nil {
 		t.Error(err)
 		return

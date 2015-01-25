@@ -51,7 +51,7 @@ func zipSGFfileContents(f *zip.File) (contents string, err error) {
 	return string(bytes), nil
 }
 
-func ParseZipSGFfile(zippath, fname string) (sgf *SGFGame, err error) {
+func ParseZipSGFfile(zippath, fname string) (games []*SGFGame, err error) {
 	r, err := zip.OpenReader(zippath)
 	if err != nil {
 		return nil, err
@@ -67,11 +67,8 @@ func ParseZipSGFfile(zippath, fname string) (sgf *SGFGame, err error) {
 			if err != nil {
 				return nil, err
 			}
-			sgf = new(SGFGame)
-			sgf.gameInfo = make(GameInfo)
-			sgf.Parse(contents)
 
-			return sgf, err
+			return Parse(contents), err
 		}
 	}
 	err = errors.New(fmt.Sprintf("file %q not found in zip archive %q", fname, zippath))
@@ -85,11 +82,11 @@ func ParseZipAllSGFfiles(zippath string) (games []*SGFGame, err error) {
 	}
 
 	for _, f := range fnames {
-		sgf, err := ParseZipSGFfile(zippath, f)
+		zippedGames, err := ParseZipSGFfile(zippath, f)
 		if err != nil {
 			return nil, err
 		}
-		games = append(games, sgf)
+		games = append(games, zippedGames...)
 	}
 
 	return games, nil

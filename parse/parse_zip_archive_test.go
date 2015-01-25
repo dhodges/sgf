@@ -39,23 +39,24 @@ func TestListingZipArchiveOnlySGFfiles(t *testing.T) {
 
 func TestParsingZipArchiveSGFfile(t *testing.T) {
 	zipArchive := zip_fixture_fpath("3_shusaku_games.zip")
-	sgf, err := ParseZipSGFfile(zipArchive, "1840/Ito_Showa-Kuwahara_Shusaku.sgf")
+	games, err := ParseZipSGFfile(zipArchive, "1840/Ito_Showa-Kuwahara_Shusaku.sgf")
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	game := games[0]
 
-	foundName, _ := sgf.GetInfo(WhitePlayerName)
+	foundName, _ := game.GetInfo(WhitePlayerName)
 	if foundName != "Ito Showa" {
 		t.Errorf("wrong white player name found: %q expected: Ito Showa", foundName)
 	}
-	foundName, _ = sgf.GetInfo(BlackPlayerName)
+	foundName, _ = game.GetInfo(BlackPlayerName)
 	if foundName != "Kuwahara Shusaku" {
 		t.Errorf("wrong black player name found: %q expected: %q", foundName, "Kuwahara Shusaku")
 	}
 
-	if sgf.NodeCount() != 202 {
-		t.Errorf("wrong node count, found: %d, expected: 202", sgf.NodeCount())
+	if game.NodeCount() != 202 {
+		t.Errorf("wrong node count, found: %d, expected: 202", game.NodeCount())
 	}
 }
 

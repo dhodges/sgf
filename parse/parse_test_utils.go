@@ -47,21 +47,19 @@ func listSgfFiles(dirname string) ([]string, error) {
 	return fileList, err
 }
 
-func parseString(str string) (sgf *SGFGame, err error) {
-	sgf = new(SGFGame)
-	sgf.gameInfo = make(GameInfo)
-	sgf.Parse(str)
-	if len(sgf.errors) > 0 {
-		return nil, errors.New(fmt.Sprintf("problems parsing sgf: %q", sgf.errors[0]))
+func parseString(str string) (games []*SGFGame, err error) {
+	games = Parse(str)
+	if len(games[0].errors) > 0 {
+		return nil, errors.New(fmt.Sprintf("problems parsing sgf: %q", games[0].errors[0]))
 	}
 
-	return sgf, nil
+	return games, nil
 }
 
-func parseFixture(fixname string) (sgf *SGFGame, err error) {
+func parseFixture(fixname string) (games []*SGFGame, err error) {
 	fixture, err := sgf_fixture(fixname)
 	if err != nil {
-		return sgf, err
+		return games, err
 	}
 
 	return parseString(fixture)

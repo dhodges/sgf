@@ -22,39 +22,41 @@ var gameInfoString = "(;" +
 	")"
 
 func TestParsingGameInfo(t *testing.T) {
-	sgf, err := parseString(gameInfoString)
+	games, err := parseString(gameInfoString)
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	game := games[0]
 
 	expected := "(;AN[bob]BR[6p]BT[South Korea]CA[UTF-8]CP[Copyright]DT[2014-12-25,26]EV[Pewter Cup]GC[it was long]GN[sally]HA[4]ON[low Chinese]OT[byo-yomi]PB[Lee Sedol]PC[Seoul]PW[Gu Li]RE[B+2]RO[03 (final)]RU[Japanese]SO[book]TM[1000]US[bill]WR[9p]WT[China]YY[yello yulambi]ZZ[zulu zimbabwe])"
-	if sgf.String() != expected {
-		t.Errorf("invalid gameInfo, found: %q, expected: %q", sgf.String(), expected)
+	if game.String() != expected {
+		t.Errorf("invalid gameInfo, found: %q, expected: %q", game.String(), expected)
 	}
 }
 
 func TestParsingFullGameInfo(t *testing.T) {
-	sgf, err := parseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
+	games, err := parseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	game := games[0]
 
-	found := sgf.gameInfo.String()[0:22]
+	found := game.gameInfo.String()[0:22]
 	expected := ";BR[5p]C[This match wa"
 	if found != expected {
 		t.Errorf("invalid gameInfo, found: %q, expected: %q)", found, expected)
 	}
 
-	foundComment, _ := sgf.GetInfo(Comment)
+	foundComment, _ := game.GetInfo(Comment)
 	expectedComment := "This match was sponsored by"
 
 	if foundComment[0:27] != expectedComment {
 		t.Errorf("invalid comment (found: '%s', expected: '%s')", foundComment, expectedComment)
 	}
 
-	verify(t, sgf, Event, "The Game of the Century")
-	verify(t, sgf, BlackPlayerName, "Go Seigen")
-	verify(t, sgf, WhitePlayerName, "Honinbo Shusai")
+	verify(t, game, Event, "The Game of the Century")
+	verify(t, game, BlackPlayerName, "Go Seigen")
+	verify(t, game, WhitePlayerName, "Honinbo Shusai")
 }
