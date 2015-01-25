@@ -4,7 +4,7 @@ import "testing"
 
 func TestGameInfoToString(t *testing.T) {
 	sgf := new(SGFGame)
-	sgf.gameInfo = map[string]string{}
+	sgf.gameInfo = make(GameInfo)
 	sgf.AddInfo(Property{BlackPlayerName, "Lee Sedol"})
 	sgf.AddInfo(Property{BlackPlayerRank, "9p"})
 	sgf.AddInfo(Property{BlackPlayerTeam, "South Korea"})
