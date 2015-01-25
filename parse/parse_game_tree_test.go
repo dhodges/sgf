@@ -7,7 +7,7 @@ import (
 
 func errorUnlessStrEqual(t *testing.T, found string, expected string, errMsg string) {
 	if found != expected {
-		t.Error(fmt.Sprintf("%s, found: '%s', expected: '%s'", errMsg, found, expected))
+		t.Errorf("%s, found: '%s', expected: '%s'", errMsg, found, expected)
 	}
 }
 
@@ -71,10 +71,10 @@ func TestParsingFullGameTree(t *testing.T) {
 	}
 
 	if node.point.String() != "B[hd]" {
-		t.Error(fmt.Sprintf("wrong node: expected \"B[hd]\", found %q", node.point))
+		t.Errorf("wrong node: expected \"B[hd]\", found %q", node.point)
 	}
 
 	if len(node.variations) != 3 {
-		t.Error(fmt.Sprintf("wrong number of variations: expected 3, found %d", len(node.variations)))
+		t.Errorf("wrong number of variations: expected 3, found %d", len(node.variations))
 	}
 }

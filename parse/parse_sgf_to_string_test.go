@@ -1,9 +1,6 @@
 package parse
 
-import (
-	"fmt"
-	"testing"
-)
+import "testing"
 
 func TestGameInfoToString(t *testing.T) {
 	sgf := new(SGFGame)
@@ -28,7 +25,7 @@ func TestGameInfoToString(t *testing.T) {
 
 	expected := "(;AN[bob]BR[9p]BT[South Korea]CA[UTF-8]CP[Copyright]DT[2014-12-25,26]EV[Pewter Cup]GC[it was long]GN[sally]HA[4]ON[low Chinese]OT[byo yomi]PB[Lee Sedol]PW[Gu Li]RE[B+2]WR[9p]WT[China])"
 	if sgf.String() != expected {
-		t.Error(fmt.Sprintf("invalid string. Found: '%s', expected: '%s'", sgf.String(), expected))
+		t.Errorf("invalid string. Found: '%s', expected: '%s'", sgf.String(), expected)
 	}
 }
 
@@ -42,7 +39,7 @@ func TestSGFtoString(t *testing.T) {
 	}
 
 	if sgf.String() != variant_sgf_1 {
-		t.Error(fmt.Sprintf("error writing SGF to string. \n   found: %q \nexpected: %q", sgf.String(), variant_sgf_1))
+		t.Errorf("error writing SGF to string. \n   found: %q \nexpected: %q", sgf.String(), variant_sgf_1)
 	}
 }
 
@@ -59,6 +56,6 @@ func TestVariationsToString(t *testing.T) {
 
 	sgfStr := sgf.String()
 	if sgfStr != gameStr {
-		t.Error(fmt.Sprintf("error writing SGF to string. \n   Found: %q, \nExpected: %q", sgfStr, gameStr))
+		t.Errorf("error writing SGF to string. \n   Found: %q, \nExpected: %q", sgfStr, gameStr)
 	}
 }

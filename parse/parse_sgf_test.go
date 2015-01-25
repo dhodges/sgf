@@ -10,14 +10,14 @@ func TestParsingSGF(t *testing.T) {
 	dirname := "/Users/david/Google Drive/SGF/AWAGC-2014"
 	fileList, err := listSgfFiles(dirname)
 	if err != nil {
-		t.Error(fmt.Sprintf("error reading sgf file list: %s", err.Error()))
+		t.Errorf("error reading sgf file list: %s", err.Error())
 		return
 	}
 Loop:
 	for _, fname := range fileList {
 		buf, err := ioutil.ReadFile(fname)
 		if err != nil {
-			t.Error(fmt.Sprintf("Error reading file: %q, %q", fname, err.Error()))
+			t.Errorf("Error reading file: %q, %q", fname, err.Error())
 			return
 		}
 		sgf := new(SGFGame)
