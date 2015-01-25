@@ -25,6 +25,10 @@ func sgf_fixture(fname string) (fixture string, err error) {
 	return fixture, err
 }
 
+func zip_fixture_fpath(fname string) string {
+	return fixture_dirname() + "/zip_files/" + fname
+}
+
 func listSgfFiles(dirname string) ([]string, error) {
 	var fileList []string
 	dirname = strings.TrimSpace(dirname)

@@ -1,6 +1,7 @@
 package parse
 
 import (
+	"archive/zip"
 	"errors"
 	"fmt"
 	"sort"
@@ -192,6 +193,20 @@ func (sgf SGFGame) showAnyErrors() {
 	for _, err := range sgf.errors {
 		fmt.Println(err)
 	}
+}
+
+func ListZipSGFfiles(fpath string) (fnames []string, err error) {
+	r, err := zip.OpenReader(fpath)
+	if err != nil {
+		return nil, err
+	}
+	defer r.Close()
+
+	for _, f := range r.File {
+		fnames = append(fnames, f.Name)
+	}
+
+	return fnames, err
 }
 
 func (sgf *SGFGame) Parse(input string) *SGFGame {
