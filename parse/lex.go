@@ -47,7 +47,6 @@ const (
 	itemLeftParen             // '('
 	itemRightParen            // ')'
 	itemSemiColon             // ';'
-	itemSpace                 // run of spaces
 	itemLeftBracket           // '['
 	itemRightBracket          // ']'
 	itemPropertyName
@@ -90,8 +89,6 @@ func (i item) String() string {
 		return ")"
 	case itemSemiColon:
 		return ";"
-	case itemSpace:
-		return "' '"
 	case itemLeftBracket:
 		return "["
 	case itemRightBracket:
@@ -167,21 +164,11 @@ func (l *lexer) quoteContext() string {
 	if end >= len(l.input) {
 		end = len(l.input) - 1
 	}
-	// TODO: is there a unicode 'cursor' glyph?
 	return l.input[start:l.pos] + "|" + l.input[l.pos:end]
 }
 
 func (l *lexer) QuoteErrorContext(message string) string {
 	return fmt.Sprintf("%s, position %d, %q", message, l.pos, l.quoteContext())
-}
-
-// accept consumes the next rune if it's from the valid set.
-func (l *lexer) accept(valid string) bool {
-	if strings.IndexRune(valid, l.next()) >= 0 {
-		return true
-	}
-	l.backup()
-	return false
 }
 
 // acceptAlphaRun consumes a run of alphabeticals from the valid set.
@@ -193,24 +180,9 @@ func (l *lexer) acceptAlphaRun() {
 
 // acceptPropertyValue consumes a run of alphabeticals from the valid set.
 func (l *lexer) acceptPropertyValueRun() {
-
 	for isPropertyValueChar(l.next()) {
 	}
 	l.backup()
-}
-
-// acceptRun consumes a run of runes from the valid set.
-func (l *lexer) acceptRun(valid string) {
-	for strings.IndexRune(valid, l.next()) >= 0 {
-	}
-	l.backup()
-}
-
-// lineNumber reports which line we're on, based on the position of
-// the previous item returned by nextItem. Doing it this way
-// means we don't have to worry about peek double counting.
-func (l *lexer) lineNumber() int {
-	return 1 + strings.Count(l.input[:l.lastPos], "\n")
 }
 
 // errorf returns an error token and terminates the scan by passing
@@ -354,10 +326,6 @@ func isWhiteSpace(r rune) bool {
 
 func isAlpha(r rune) bool {
 	return unicode.IsLetter(r)
-}
-
-func isAlphaNumeric(r rune) bool {
-	return r == '_' || unicode.IsLetter(r) || unicode.IsDigit(r)
 }
 
 func isPropertyValueChar(r rune) bool {
