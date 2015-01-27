@@ -1,31 +1,35 @@
 package parse
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/dhodges/sgf"
+)
 
 func TestGameInfoToString(t *testing.T) {
-	sgf := new(SGFGame)
-	sgf.gameInfo = make(GameInfo)
-	sgf.AddInfo(Property{BlackPlayerName, "Lee Sedol"})
-	sgf.AddInfo(Property{BlackPlayerRank, "9p"})
-	sgf.AddInfo(Property{BlackPlayerTeam, "South Korea"})
-	sgf.AddInfo(Property{WhitePlayerName, "Gu Li"})
-	sgf.AddInfo(Property{WhitePlayerRank, "9p"})
-	sgf.AddInfo(Property{WhitePlayerTeam, "China"})
-	sgf.AddInfo(Property{Result, "B+2"})
-	sgf.AddInfo(Property{Charset, "UTF-8"})
-	sgf.AddInfo(Property{Annotator, "bob"})
-	sgf.AddInfo(Property{Copyright, "Copyright"})
-	sgf.AddInfo(Property{Date, "2014-12-25,26"})
-	sgf.AddInfo(Property{Handicap, "4"})
-	sgf.AddInfo(Property{Event, "Pewter Cup"})
-	sgf.AddInfo(Property{GameName, "sally"})
-	sgf.AddInfo(Property{GameComment, "it was long"})
-	sgf.AddInfo(Property{Opening, "low Chinese"})
-	sgf.AddInfo(Property{Overtime, "byo yomi"})
+	game := new(SGFGame)
+	game.gameInfo = make(GameInfo)
+	game.AddInfo(sgf.Property{Name: sgf.BlackPlayerName, Value: "Lee Sedol"})
+	game.AddInfo(sgf.Property{Name: sgf.BlackPlayerRank, Value: "9p"})
+	game.AddInfo(sgf.Property{Name: sgf.BlackPlayerTeam, Value: "South Korea"})
+	game.AddInfo(sgf.Property{Name: sgf.WhitePlayerName, Value: "Gu Li"})
+	game.AddInfo(sgf.Property{Name: sgf.WhitePlayerRank, Value: "9p"})
+	game.AddInfo(sgf.Property{Name: sgf.WhitePlayerTeam, Value: "China"})
+	game.AddInfo(sgf.Property{Name: sgf.Result, Value: "B+2"})
+	game.AddInfo(sgf.Property{Name: sgf.Charset, Value: "UTF-8"})
+	game.AddInfo(sgf.Property{Name: sgf.Annotator, Value: "bob"})
+	game.AddInfo(sgf.Property{Name: sgf.Copyright, Value: "Copyright"})
+	game.AddInfo(sgf.Property{Name: sgf.Date, Value: "2014-12-25,26"})
+	game.AddInfo(sgf.Property{Name: sgf.Handicap, Value: "4"})
+	game.AddInfo(sgf.Property{Name: sgf.Event, Value: "Pewter Cup"})
+	game.AddInfo(sgf.Property{Name: sgf.GameName, Value: "sally"})
+	game.AddInfo(sgf.Property{Name: sgf.GameComment, Value: "it was long"})
+	game.AddInfo(sgf.Property{Name: sgf.Opening, Value: "low Chinese"})
+	game.AddInfo(sgf.Property{Name: sgf.Overtime, Value: "byo yomi"})
 
 	expected := "(;AN[bob]BR[9p]BT[South Korea]CA[UTF-8]CP[Copyright]DT[2014-12-25,26]EV[Pewter Cup]GC[it was long]GN[sally]HA[4]ON[low Chinese]OT[byo yomi]PB[Lee Sedol]PW[Gu Li]RE[B+2]WR[9p]WT[China])"
-	if sgf.String() != expected {
-		t.Errorf("invalid string. Found: '%s', expected: '%s'", sgf.String(), expected)
+	if game.String() != expected {
+		t.Errorf("invalid string. Found: '%s', expected: '%s'", game.String(), expected)
 	}
 }
 

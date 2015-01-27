@@ -5,16 +5,9 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/dhodges/sgf"
 )
-
-type Property struct {
-	name  string
-	value string
-}
-
-func (p Property) String() string {
-	return fmt.Sprintf("%s[%s]", p.name, p.value)
-}
 
 type Point struct {
 	x rune
@@ -26,8 +19,8 @@ func (point Point) String() string {
 }
 
 type Node struct {
-	point      Property
-	properties []Property
+	point      sgf.Property
+	properties []sgf.Property
 	variations []*Node
 	next       *Node
 }
@@ -63,8 +56,8 @@ func (node Node) String() string {
 		node.variationString()
 }
 
-func (node *Node) AddProperty(prop Property) {
-	switch prop.name {
+func (node *Node) AddProperty(prop sgf.Property) {
+	switch prop.Name {
 	case "B", "W":
 		node.point = prop
 	default:
@@ -82,33 +75,6 @@ func (n *Node) NewVariation() *Node {
 	n.variations = append(n.variations, node)
 	return node
 }
-
-const BlackPlayerName = "PB"
-const BlackPlayerRank = "BR"
-const BlackPlayerTeam = "BT"
-const WhitePlayerName = "PW"
-const WhitePlayerRank = "WR"
-const WhitePlayerTeam = "WT"
-const Annotator = "AN"
-const Copyright = "CP"
-const Date = "DT"
-const Event = "EV"
-const GameComment = "GC"
-const Comment = "C"
-const GameName = "GN"
-const Handicap = "HA"
-const Opening = "ON"
-const Overtime = "OT"
-const Place = "PC"
-const Result = "RE"
-const Round = "RO"
-const Rules = "RU"
-const Source = "SO"
-const TimeLimits = "TM"
-const User = "US"
-const Charset = "CA"
-const Boardsize = "SZ"
-const Komi = "KM"
 
 type GameInfo map[string]string
 
@@ -135,8 +101,8 @@ type SGFGame struct {
 	errors   []error
 }
 
-func (sgf *SGFGame) AddInfo(prop Property) {
-	sgf.gameInfo[strings.ToUpper(prop.name)] = prop.value
+func (sgf *SGFGame) AddInfo(prop sgf.Property) {
+	sgf.gameInfo[strings.ToUpper(prop.Name)] = prop.Value
 }
 
 func (sgf *SGFGame) GetInfo(name string) (value string, ok bool) {
@@ -185,9 +151,9 @@ func (sgf *SGFGame) AddError(msg string) {
 
 func Parse(input string) (games []*SGFGame) {
 	var currentNode *Node
-	var sgf *SGFGame
+	var game *SGFGame
 	l := lex(input)
-	prop := Property{}
+	prop := sgf.Property{}
 	parsingSetup := false
 	parsingGametree := false
 	nodeStack := new(Stack)
@@ -198,21 +164,21 @@ Loop:
 		switch i.typ {
 		case itemLeftParen:
 			if !parsingSetup && !parsingGametree {
-				sgf = new(SGFGame)
-				sgf.gameInfo = make(GameInfo)
-				games = append(games, sgf)
+				game = new(SGFGame)
+				game.gameInfo = make(GameInfo)
+				games = append(games, game)
 				parsingSetup = true
 			} else if parsingSetup {
-				sgf.AddError(l.QuoteErrorContext("unexpected left parenthesis"))
+				game.AddError(l.QuoteErrorContext("unexpected left parenthesis"))
 				break Loop
 			} else {
-				if len(sgf.gameInfo) == 0 {
+				if len(game.gameInfo) == 0 {
 					parsingSetup = true
 				} else {
 					nodeStack.Push(currentNode)
 					currentNode = currentNode.NewVariation()
 					if l.nextItem().typ != itemSemiColon {
-						sgf.AddError(l.QuoteErrorContext("semi-colon expected here"))
+						game.AddError(l.QuoteErrorContext("semi-colon expected here"))
 						break Loop
 					}
 				}
@@ -227,26 +193,26 @@ Loop:
 			}
 		case itemSemiColon:
 			if parsingSetup {
-				if len(sgf.gameInfo) > 0 {
+				if len(game.gameInfo) > 0 {
 					parsingSetup = false
 					parsingGametree = true
-					sgf.gameTree = new(Node)
-					currentNode = sgf.gameTree
+					game.gameTree = new(Node)
+					currentNode = game.gameTree
 				}
 			} else {
 				currentNode = currentNode.NewNode()
 			}
 		case itemPropertyName:
-			prop = Property{i.val, ""}
+			prop = sgf.Property{Name: i.val, Value: ""}
 		case itemPropertyValue:
-			prop.value = i.val
+			prop.Value = i.val
 			if parsingSetup {
-				sgf.AddInfo(prop)
+				game.AddInfo(prop)
 			} else {
 				currentNode.AddProperty(prop)
 			}
 		case itemError:
-			sgf.AddError(i.val)
+			game.AddError(i.val)
 			break Loop
 		case itemEOF:
 			break Loop

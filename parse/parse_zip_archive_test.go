@@ -1,6 +1,10 @@
 package parse
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/dhodges/sgf"
+)
 
 func TestListingZipArchive(t *testing.T) {
 	sgfFileList, err := ListZipSGFfiles(zip_fixture_fpath("go4go_collection-20150118.zip"))
@@ -46,11 +50,11 @@ func TestParsingZipArchiveSGFfile(t *testing.T) {
 	}
 	game := games[0]
 
-	foundName, _ := game.GetInfo(WhitePlayerName)
+	foundName, _ := game.GetInfo(sgf.WhitePlayerName)
 	if foundName != "Ito Showa" {
 		t.Errorf("wrong white player name found: %q expected: Ito Showa", foundName)
 	}
-	foundName, _ = game.GetInfo(BlackPlayerName)
+	foundName, _ = game.GetInfo(sgf.BlackPlayerName)
 	if foundName != "Kuwahara Shusaku" {
 		t.Errorf("wrong black player name found: %q expected: %q", foundName, "Kuwahara Shusaku")
 	}
@@ -73,17 +77,17 @@ func TestParsingZipArchiveAllSGFfiles(t *testing.T) {
 		return
 	}
 
-	foundDate, _ := games[0].GetInfo(Date)
+	foundDate, _ := games[0].GetInfo(sgf.Date)
 	if foundDate != "1840-03-14" {
 		t.Errorf("first game is incorrect, found %q, expected '1840-03-14'", foundDate)
 	}
 
-	foundName, _ := games[1].GetInfo(WhitePlayerName)
+	foundName, _ := games[1].GetInfo(sgf.WhitePlayerName)
 	if foundName != "Ota Yuzo" {
 		t.Errorf("wrong white player name \nfound:   %q \nexpected: Ota Yuzo", foundName)
 	}
 
-	foundName, _ = games[2].GetInfo(WhitePlayerName)
+	foundName, _ = games[2].GetInfo(sgf.WhitePlayerName)
 	if foundName != "Kadono Tadazaemon" {
 		t.Errorf("wrong white player name \nfound:   %q \nexpected: Kadono Tadazaemon", foundName)
 	}

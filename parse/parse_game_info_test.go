@@ -1,6 +1,10 @@
 package parse
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/dhodges/sgf"
+)
 
 func verify(t *testing.T, sgf *SGFGame, propertyName, expected string) {
 	value, _ := sgf.gameInfo[propertyName]
@@ -49,14 +53,14 @@ func TestParsingFullGameInfo(t *testing.T) {
 		t.Errorf("invalid gameInfo, found: %q, expected: %q)", found, expected)
 	}
 
-	foundComment, _ := game.GetInfo(Comment)
+	foundComment, _ := game.GetInfo(sgf.Comment)
 	expectedComment := "This match was sponsored by"
 
 	if foundComment[0:27] != expectedComment {
 		t.Errorf("invalid comment (found: '%s', expected: '%s')", foundComment, expectedComment)
 	}
 
-	verify(t, game, Event, "The Game of the Century")
-	verify(t, game, BlackPlayerName, "Go Seigen")
-	verify(t, game, WhitePlayerName, "Honinbo Shusai")
+	verify(t, game, sgf.Event, "The Game of the Century")
+	verify(t, game, sgf.BlackPlayerName, "Go Seigen")
+	verify(t, game, sgf.WhitePlayerName, "Honinbo Shusai")
 }
