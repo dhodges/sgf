@@ -1,6 +1,9 @@
 package sgf
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 type Property struct {
 	Name  string
@@ -76,6 +79,25 @@ func (n *Node) NewVariation() *Node {
 	node := new(Node)
 	n.Variations = append(n.Variations, node)
 	return node
+}
+
+type GameInfo map[string]string
+
+func (gi GameInfo) SortedKeys() []string {
+	var keys sort.StringSlice
+	for k, _ := range gi {
+		keys = append(keys, k)
+	}
+	sort.Sort(keys)
+	return keys
+}
+
+func (gi GameInfo) String() string {
+	str := ""
+	for _, k := range gi.SortedKeys() {
+		str += k + "[" + gi[k] + "]"
+	}
+	return ";" + str
 }
 
 const BlackPlayerName = "PB"

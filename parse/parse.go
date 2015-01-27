@@ -3,33 +3,13 @@ package parse
 import (
 	"errors"
 	"fmt"
-	"sort"
 	"strings"
 
 	"github.com/dhodges/sgf"
 )
 
-type GameInfo map[string]string
-
-func (gi GameInfo) SortedKeys() []string {
-	var keys sort.StringSlice
-	for k, _ := range gi {
-		keys = append(keys, k)
-	}
-	sort.Sort(keys)
-	return keys
-}
-
-func (gi GameInfo) String() string {
-	str := ""
-	for _, k := range gi.SortedKeys() {
-		str += k + "[" + gi[k] + "]"
-	}
-	return ";" + str
-}
-
 type SGFGame struct {
-	gameInfo GameInfo
+	gameInfo sgf.GameInfo
 	gameTree *sgf.Node
 	errors   []error
 }
@@ -98,7 +78,7 @@ Loop:
 		case itemLeftParen:
 			if !parsingSetup && !parsingGametree {
 				game = new(SGFGame)
-				game.gameInfo = make(GameInfo)
+				game.gameInfo = make(sgf.GameInfo)
 				games = append(games, game)
 				parsingSetup = true
 			} else if parsingSetup {
