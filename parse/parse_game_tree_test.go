@@ -34,22 +34,22 @@ func TestParsingGameTree(t *testing.T) {
 	}
 
 	node := game.gameTree
-	errorUnlessStrEqual(t, node.point.String(), "B[qc]", "1st node move is incorrect")
+	errorUnlessStrEqual(t, node.Point.String(), "B[qc]", "1st node move is incorrect")
 
-	node = node.next
-	errorUnlessStrEqual(t, node.point.String(), "W[cd]", "2nd node move is incorrect")
+	node = node.Next
+	errorUnlessStrEqual(t, node.Point.String(), "W[cd]", "2nd node move is incorrect")
 
-	node = node.next
-	errorUnlessStrEqual(t, node.point.String(), "B[dp]", "3rd node move is incorrect")
+	node = node.Next
+	errorUnlessStrEqual(t, node.Point.String(), "B[dp]", "3rd node move is incorrect")
 
-	node = node.next
-	errorUnlessStrEqual(t, node.point.String(), "W[pq]", "4th node move is incorrect")
+	node = node.Next
+	errorUnlessStrEqual(t, node.Point.String(), "W[pq]", "4th node move is incorrect")
 
-	node = node.next
-	errorUnlessStrEqual(t, node.point.String(), "B[jj]", "5th node move is incorrect")
+	node = node.Next
+	errorUnlessStrEqual(t, node.Point.String(), "B[jj]", "5th node move is incorrect")
 
-	node = node.next
-	errorUnlessStrEqual(t, node.point.String(), "W[pd]", "6th node move is incorrect")
+	node = node.Next
+	errorUnlessStrEqual(t, node.Point.String(), "W[pd]", "6th node move is incorrect")
 }
 
 func TestParsingFullGameTree(t *testing.T) {
@@ -72,11 +72,11 @@ func TestParsingFullGameTree(t *testing.T) {
 		return
 	}
 
-	if node.point.String() != "B[hd]" {
-		t.Errorf("wrong node: expected \"B[hd]\", found %q", node.point)
+	if node.Point.String() != "B[hd]" {
+		t.Errorf("wrong node: expected \"B[hd]\", found %q", node.Point)
 	}
 
-	if len(node.variations) != 3 {
-		t.Errorf("wrong number of variations: expected 3, found %d", len(node.variations))
+	if len(node.Variations) != 3 {
+		t.Errorf("wrong number of variations: expected 3, found %d", len(node.Variations))
 	}
 }
