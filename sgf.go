@@ -11,6 +11,15 @@ func (p Property) String() string {
 	return fmt.Sprintf("%s[%s]", p.Name, p.Value)
 }
 
+type Point struct {
+	X rune
+	Y rune
+}
+
+func (point Point) String() string {
+	return fmt.Sprintf("[%c%c]", point.X, point.Y)
+}
+
 const BlackPlayerName = "PB"
 const BlackPlayerRank = "BR"
 const BlackPlayerTeam = "BT"

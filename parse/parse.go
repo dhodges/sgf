@@ -9,15 +9,6 @@ import (
 	"github.com/dhodges/sgf"
 )
 
-type Point struct {
-	x rune
-	y rune
-}
-
-func (point Point) String() string {
-	return fmt.Sprintf("[%c%c]", point.x, point.y)
-}
-
 type Node struct {
 	point      sgf.Property
 	properties []sgf.Property
