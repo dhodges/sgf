@@ -33,7 +33,7 @@ func TestParsingGameTree(t *testing.T) {
 		t.Errorf("game tree is incorrect, found %d nodes, expected 6", game.NodeCount())
 	}
 
-	node := game.gameTree
+	node := game.GameTree
 	errorUnlessStrEqual(t, node.Point.String(), "B[qc]", "1st node move is incorrect")
 
 	node = node.Next

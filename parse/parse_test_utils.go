@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/dhodges/sgf"
 )
 
 func fixture_dirname() string {
@@ -47,16 +49,16 @@ func listSgfFiles(dirname string) ([]string, error) {
 	return fileList, err
 }
 
-func parseString(str string) (games []*SGFGame, err error) {
+func parseString(str string) (games []*sgf.SGFGame, err error) {
 	games = Parse(str)
-	if len(games[0].errors) > 0 {
-		return nil, errors.New(fmt.Sprintf("problems parsing sgf: %q", games[0].errors[0]))
+	if len(games[0].Errors) > 0 {
+		return nil, errors.New(fmt.Sprintf("problems parsing sgf: %q", games[0].Errors[0]))
 	}
 
 	return games, nil
 }
 
-func parseFixture(fixname string) (games []*SGFGame, err error) {
+func parseFixture(fixname string) (games []*sgf.SGFGame, err error) {
 	fixture, err := sgf_fixture(fixname)
 	if err != nil {
 		return games, err

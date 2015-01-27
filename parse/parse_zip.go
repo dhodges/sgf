@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"sort"
 	"strings"
+
+	"github.com/dhodges/sgf"
 )
 
 func ListZipSGFfiles(fpath string) (fnames sort.StringSlice, err error) {
@@ -51,7 +53,7 @@ func zipSGFfileContents(f *zip.File) (contents string, err error) {
 	return string(bytes), nil
 }
 
-func ParseZipSGFfile(zippath, fname string) (games []*SGFGame, err error) {
+func ParseZipSGFfile(zippath, fname string) (games []*sgf.SGFGame, err error) {
 	r, err := zip.OpenReader(zippath)
 	if err != nil {
 		return nil, err
@@ -75,7 +77,7 @@ func ParseZipSGFfile(zippath, fname string) (games []*SGFGame, err error) {
 	return nil, err
 }
 
-func ParseZipAllSGFfiles(zippath string) (games []*SGFGame, err error) {
+func ParseZipAllSGFfiles(zippath string) (games []*sgf.SGFGame, err error) {
 	fnames, err := ListZipSGFfiles(zippath)
 	if err != nil {
 		return nil, err

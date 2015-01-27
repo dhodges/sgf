@@ -6,8 +6,8 @@ import (
 	"github.com/dhodges/sgf"
 )
 
-func verify(t *testing.T, sgf *SGFGame, propertyName, expected string) {
-	value, _ := sgf.gameInfo[propertyName]
+func verify(t *testing.T, sgf *sgf.SGFGame, propertyName, expected string) {
+	value, _ := sgf.GameInfo[propertyName]
 
 	if value != expected {
 		t.Errorf("invalid property: '%s' (found: '%s', expected: '%s')", propertyName, value, expected)
@@ -47,7 +47,7 @@ func TestParsingFullGameInfo(t *testing.T) {
 	}
 	game := games[0]
 
-	found := game.gameInfo.String()[0:22]
+	found := game.GameInfo.String()[0:22]
 	expected := ";BR[5p]C[This match wa"
 	if found != expected {
 		t.Errorf("invalid gameInfo, found: %q, expected: %q)", found, expected)
