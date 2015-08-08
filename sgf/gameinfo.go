@@ -1,6 +1,9 @@
 package sgf
 
-import "sort"
+import  (
+	"sort"
+	"encoding/json"
+)
 
 type GameInfo map[string]string
 
@@ -19,4 +22,12 @@ func (gi GameInfo) String() string {
 		str += k + "[" + gi[k] + "]"
 	}
 	return ";" + str
+}
+
+func (gi GameInfo) ToJson() ([]byte, error) {
+	return json.Marshal(gi)
+}
+
+func (gi *GameInfo) FromJson(json_str string) error {
+  return json.Unmarshal([]byte(json_str), &gi)
 }

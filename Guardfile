@@ -9,7 +9,7 @@ def runtest(fname)
   wd = Dir.getwd
 
   Dir.chdir File.dirname(fname)
-  `go build -v && go test -v && go vet`
+  `go test -v && go vet`
 ensure
   Dir.chdir wd
 end
