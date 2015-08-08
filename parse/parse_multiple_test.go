@@ -3,7 +3,7 @@ package parse
 import (
 	"testing"
 
-	"github.com/dhodges/sgf/sgf"
+	"github.com/dhodges/sgfinfo/sgf"
 )
 
 func TestParseMultiple(t *testing.T) {

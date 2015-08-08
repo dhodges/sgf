@@ -1,6 +1,6 @@
 package parse
 
-import "github.com/dhodges/sgf/sgf"
+import "github.com/dhodges/sgfinfo/sgf"
 
 func Parse(input string) (games []*sgf.SGFGame) {
 	var currentNode *sgf.Node

@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/dhodges/sgf/sgf"
+	"github.com/dhodges/sgfinfo/sgf"
 )
 
 func fixture_dirname() string {
