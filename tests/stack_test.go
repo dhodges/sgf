@@ -1,9 +1,13 @@
-package parse
+package tests
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/dhodges/sgfinfo/parse"
+)
 
 func TestStack(t *testing.T) {
-	stack := new(Stack)
+	stack := new(parse.Stack)
 
 	stack.Push("H")
 	stack.Push("R")

@@ -4,11 +4,10 @@ import (
   "testing"
 
   "github.com/dhodges/sgfinfo/sgf"
-  "github.com/dhodges/sgfinfo/parse"
 )
 
 func TestGameInfoJson(t *testing.T) {
-  games, err := parse.ParseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
+  games, err := parseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
   if err != nil {
     t.Error(err)
     return
@@ -35,19 +34,19 @@ func TestGameInfoJson(t *testing.T) {
 
 
 func verifyGameInfo(t *testing.T, gi sgf.GameInfo) {
-  verify(t, gi, "BR", "5p")
-  verify(t, gi, "CA", "UTF-8")
-  verify(t, gi, "DT", "1933-10-16")
-  verify(t, gi, "EV", "The Game of the Century")
-  verify(t, gi, "KM", "0")
-  verify(t, gi, "PB", "Go Seigen")
-  verify(t, gi, "PW", "Honinbo Shusai")
-  verify(t, gi, "RE", "W+2")
-  verify(t, gi, "SZ", "19")
-  verify(t, gi, "WR", "9p")
+  verifyProperty(t, gi, "BR", "5p")
+  verifyProperty(t, gi, "CA", "UTF-8")
+  verifyProperty(t, gi, "DT", "1933-10-16")
+  verifyProperty(t, gi, "EV", "The Game of the Century")
+  verifyProperty(t, gi, "KM", "0")
+  verifyProperty(t, gi, "PB", "Go Seigen")
+  verifyProperty(t, gi, "PW", "Honinbo Shusai")
+  verifyProperty(t, gi, "RE", "W+2")
+  verifyProperty(t, gi, "SZ", "19")
+  verifyProperty(t, gi, "WR", "9p")
 }
 
-func verify(t *testing.T, gi sgf.GameInfo, propertyName, expected string) {
+func verifyProperty(t *testing.T, gi sgf.GameInfo, propertyName, expected string) {
   value, _ := gi[propertyName]
 
   if value != expected {

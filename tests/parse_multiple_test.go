@@ -1,9 +1,10 @@
-package parse
+package tests
 
 import (
 	"testing"
 
 	"github.com/dhodges/sgfinfo/sgf"
+	"github.com/dhodges/sgfinfo/parse"
 	"github.com/dhodges/sgfinfo/fixtures"
 )
 
@@ -14,7 +15,7 @@ func TestParseMultiple(t *testing.T) {
 		return
 	}
 
-	games := Parse(fixture)
+	games := parse.Parse(fixture)
 	if len(games) != 259 {
 		t.Errorf("wrong number of games, found %d, expected 259", len(games))
 	}
