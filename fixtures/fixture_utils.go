@@ -22,6 +22,6 @@ func Sgf(fname string) (fixture string, err error) {
 	return fixture, err
 }
 
-func Zip_fixture_fpath(fname string) string {
+func Zip_fpath(fname string) string {
 	return fixture_dirname() + "/zip_files/" + fname
 }
