@@ -6,28 +6,17 @@ import (
 	"github.com/dhodges/sgfinfo/sgf"
 	"github.com/dhodges/sgfinfo/parse"
 	"github.com/dhodges/sgfinfo/fixtures"
+  "github.com/stretchr/testify/assert"
 )
 
 func TestParseMultiple(t *testing.T) {
 	fixture, err := fixtures.Sgf("honinbo.sgf")
-	if err != nil {
-		t.Error("problem reading fixture 'honinbo.sgf'")
-		return
-	}
+	assert.Equal(t, err, nil, "problem loading fixture")
 
 	games := parse.Parse(fixture)
-	if len(games) != 259 {
-		t.Errorf("wrong number of games, found %d, expected 259", len(games))
-	}
+	assert.Equal(t, len(games), 259, "wrong number of games")
 
 	game := games[6]
-
-	foundName, _ := game.GetInfo(sgf.BlackPlayerName)
-	if foundName != "Hashimoto Utaro" {
-		t.Errorf("wrong black player name, found: %q, expected: %q", foundName, "Hashimoto Utaro")
-	}
-	foundDate, _ := game.GetInfo(sgf.Date)
-	if foundDate != "1943-05-05,06,07" {
-		t.Errorf("wrong date, found: %q, expected: %q", foundDate, "1943-05-05,06,07")
-	}
+	assert.Equal(t, game.GameInfo[sgf.BlackPlayerName], "Hashimoto Utaro",  "wrong black player name")
+	assert.Equal(t, game.GameInfo[sgf.Date],            "1943-05-05,06,07", "wrong date")
 }

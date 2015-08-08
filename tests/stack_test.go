@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/dhodges/sgfinfo/parse"
+  "github.com/stretchr/testify/assert"
 )
 
 func TestStack(t *testing.T) {
@@ -13,27 +14,10 @@ func TestStack(t *testing.T) {
 	stack.Push("R")
 	stack.Push("Puffenstuff")
 
-	if stack.Len() != 3 {
-		t.Error("stack count is wrong")
-	}
+  assert.Equal(t, stack.Len(),  3, "stack count is wrong")
 
-	item := stack.Peek()
-	if item != "Puffenstuff" {
-		t.Errorf("stack is wrong, expected 'Puffenstuff' but found %q", item)
-	}
-
-	item = stack.Pop()
-	if item != "Puffenstuff" {
-		t.Errorf("stack is wrong, expected 'Puffenstuff' but found %q", item)
-	}
-
-	item = stack.Pop()
-	if item != "R" {
-		t.Errorf("stack is wrong, expected 'R' but found %q", item)
-	}
-
-	item = stack.Pop()
-	if item != "H" {
-		t.Errorf("stack is wrong, expected 'H' but found %q", item)
-	}
+  assert.Equal(t, stack.Peek(), "Puffenstuff", "stack is wrong")
+  assert.Equal(t, stack.Pop(),  "Puffenstuff", "stack is wrong")
+  assert.Equal(t, stack.Pop(),  "R",           "stack is wrong")
+  assert.Equal(t, stack.Pop(),  "H",           "stack is wrong")
 }

@@ -6,91 +6,43 @@ import (
 	"github.com/dhodges/sgfinfo/sgf"
 	"github.com/dhodges/sgfinfo/parse"
 	"github.com/dhodges/sgfinfo/fixtures"
+  "github.com/stretchr/testify/assert"
 )
 
 func TestListingZipArchive(t *testing.T) {
 	sgfFileList, err := parse.ListZipSGFfiles(fixtures.Zip_fpath("go4go_collection-20150118.zip"))
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	assert.Equal(t, err, nil, "problem listing zip fixtures")
 
-	if len(sgfFileList) != 36 {
-		t.Errorf("expected 36 files, but found %d", len(sgfFileList))
-	}
-
-	expectedName := "__go4go_20150111_Li-Ziqi_Hu-Aohua.sgf"
-	foundName := sgfFileList[8]
-	if foundName != expectedName {
-		t.Errorf("wrong name: sgfFileList[8], \nexpected  %q \nbut found %q", expectedName, foundName)
-	}
+	assert.Equal(t, len(sgfFileList), 36, "wrong file count")
+	assert.Equal(t, sgfFileList[8], "__go4go_20150111_Li-Ziqi_Hu-Aohua.sgf", "wrong name: sgfFileList[8]")
 }
 
 func TestListingZipArchiveOnlySGFfiles(t *testing.T) {
 	sgfFileList, err := parse.ListZipSGFfiles(fixtures.Zip_fpath("3_shusaku_games.zip"))
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	assert.Equal(t, err, nil, "problem listing zip fixtures")
 
-	if len(sgfFileList) != 3 {
-		t.Errorf("expected 3 files, but found %d", len(sgfFileList))
-	}
-
-	expected := "1842/Ota_Yuzo-Kuwahara_Shusaku.sgf"
-	if sgfFileList[1] != expected {
-		t.Errorf("zip filelist is wrong: \nfound    %q \nexpected %q", sgfFileList[1], expected)
-	}
+	assert.Equal(t, len(sgfFileList), 3, "wrong file list length")
+	assert.Equal(t, sgfFileList[1],   "1842/Ota_Yuzo-Kuwahara_Shusaku.sgf", "zip filelist is wrong")
 }
 
 func TestParsingZipArchiveSGFfile(t *testing.T) {
 	zipArchive := fixtures.Zip_fpath("3_shusaku_games.zip")
 	games, err := parse.ParseZipSGFfile(zipArchive, "1840/Ito_Showa-Kuwahara_Shusaku.sgf")
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	assert.Equal(t, err, nil, "problem parsing zip archive")
+
 	game := games[0]
-
-	foundName, _ := game.GetInfo(sgf.WhitePlayerName)
-	if foundName != "Ito Showa" {
-		t.Errorf("wrong white player name found: %q expected: Ito Showa", foundName)
-	}
-	foundName, _ = game.GetInfo(sgf.BlackPlayerName)
-	if foundName != "Kuwahara Shusaku" {
-		t.Errorf("wrong black player name found: %q expected: %q", foundName, "Kuwahara Shusaku")
-	}
-
-	if game.NodeCount() != 202 {
-		t.Errorf("wrong node count, found: %d, expected: 202", game.NodeCount())
-	}
+	assert.Equal(t, game.GameInfo[sgf.WhitePlayerName], "Ito Showa", "wrong white player name found")
+	assert.Equal(t, game.GameInfo[sgf.BlackPlayerName], "Kuwahara Shusaku", "wrong black player name found")
+	assert.Equal(t, game.NodeCount(), 202,              "wrong node count")
 }
 
 func TestParsingZipArchiveAllSGFfiles(t *testing.T) {
 	zipArchive := fixtures.Zip_fpath("3_shusaku_games.zip")
 	games, err := parse.ParseZipAllSGFfiles(zipArchive)
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	assert.Equal(t, err, nil, "problem parsing zip archive")
 
-	if len(games) != 3 {
-		t.Errorf("wrong number of games, found: %d, expected 3", len(games))
-		return
-	}
-
-	foundDate, _ := games[0].GetInfo(sgf.Date)
-	if foundDate != "1840-03-14" {
-		t.Errorf("first game is incorrect, found %q, expected '1840-03-14'", foundDate)
-	}
-
-	foundName, _ := games[1].GetInfo(sgf.WhitePlayerName)
-	if foundName != "Ota Yuzo" {
-		t.Errorf("wrong white player name \nfound:   %q \nexpected: Ota Yuzo", foundName)
-	}
-
-	foundName, _ = games[2].GetInfo(sgf.WhitePlayerName)
-	if foundName != "Kadono Tadazaemon" {
-		t.Errorf("wrong white player name \nfound:   %q \nexpected: Kadono Tadazaemon", foundName)
-	}
+	assert.Equal(t, len(games), 3, "wrong number of games")
+	assert.Equal(t, games[0].GameInfo[sgf.Date],            "1840-03-14",        "first game is incorrect")
+	assert.Equal(t, games[1].GameInfo[sgf.WhitePlayerName], "Ota Yuzo",          "wrong white player name")
+	assert.Equal(t, games[2].GameInfo[sgf.WhitePlayerName], "Kadono Tadazaemon", "wrong white player name")
 }

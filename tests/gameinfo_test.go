@@ -4,53 +4,37 @@ import (
   "testing"
 
   "github.com/dhodges/sgfinfo/sgf"
+  "github.com/stretchr/testify/assert"
 )
 
 func TestGameInfoJson(t *testing.T) {
   games, err := parseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
-  if err != nil {
-    t.Error(err)
-    return
-  }
-  game := games[0]
+  assert.Equal(t, err, nil, "problem loading fixture")
 
-  verifyGameInfo(t, game.GameInfo)
+  game := games[0]
+  assert.Equal(t, game.GameInfo["BR"], "5p", "")
+  assert.Equal(t, game.GameInfo["CA"], "UTF-8", "")
+  assert.Equal(t, game.GameInfo["DT"], "1933-10-16", "")
+  assert.Equal(t, game.GameInfo["EV"], "The Game of the Century", "")
+  assert.Equal(t, game.GameInfo["KM"], "0", "")
+  assert.Equal(t, game.GameInfo["PB"], "Go Seigen", "")
+  assert.Equal(t, game.GameInfo["PW"], "Honinbo Shusai", "")
+  assert.Equal(t, game.GameInfo["RE"], "W+2", "")
+  assert.Equal(t, game.GameInfo["SZ"], "19", "")
+  assert.Equal(t, game.GameInfo["WR"], "9p", "")
 
   b, err := game.GameInfo.ToJson()
-  if err != nil {
-    t.Error(err)
-    return
-  }
+  assert.Equal(t, err, nil, "problem generating json")
 
   var gi sgf.GameInfo
   err = gi.FromJson(string(b))
-  if err != nil {
-    t.Error(err)
-    return
-  }
+  assert.Equal(t, err, nil, "problem unmarshalling json")
 
-  verifyGameInfo(t, gi)
 }
 
 
-func verifyGameInfo(t *testing.T, gi sgf.GameInfo) {
-  verifyProperty(t, gi, "BR", "5p")
-  verifyProperty(t, gi, "CA", "UTF-8")
-  verifyProperty(t, gi, "DT", "1933-10-16")
-  verifyProperty(t, gi, "EV", "The Game of the Century")
-  verifyProperty(t, gi, "KM", "0")
-  verifyProperty(t, gi, "PB", "Go Seigen")
-  verifyProperty(t, gi, "PW", "Honinbo Shusai")
-  verifyProperty(t, gi, "RE", "W+2")
-  verifyProperty(t, gi, "SZ", "19")
-  verifyProperty(t, gi, "WR", "9p")
-}
 
-func verifyProperty(t *testing.T, gi sgf.GameInfo, propertyName, expected string) {
-  value, _ := gi[propertyName]
 
-  if value != expected {
-    t.Errorf("invalid property: '%s' (found: '%s', expected: '%s')", propertyName, value, expected)
   }
 }
 

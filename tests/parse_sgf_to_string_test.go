@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/dhodges/sgfinfo/sgf"
+  "github.com/stretchr/testify/assert"
 )
 
 func TestGameInfoToString(t *testing.T) {
@@ -28,24 +29,17 @@ func TestGameInfoToString(t *testing.T) {
 	game.AddInfo(sgf.Property{Name: sgf.Overtime, Value: "byo yomi"})
 
 	expected := "(;AN[bob]BR[9p]BT[South Korea]CA[UTF-8]CP[Copyright]DT[2014-12-25,26]EV[Pewter Cup]GC[it was long]GN[sally]HA[4]ON[low Chinese]OT[byo yomi]PB[Lee Sedol]PW[Gu Li]RE[B+2]WR[9p]WT[China])"
-	if game.String() != expected {
-		t.Errorf("invalid string. Found: '%s', expected: '%s'", game.String(), expected)
-	}
+	assert.Equal(t, game.String(), expected, "invalid string")
 }
 
 func TestSGFtoString(t *testing.T) {
 	variant_sgf_1 := "(;GM[1];B[dp];W[pd];B[cd])"
 
 	games, err := parseString(variant_sgf_1)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	game := games[0]
+	assert.Equal(t, err, nil, "problem parsing game string")
 
-	if game.String() != variant_sgf_1 {
-		t.Errorf("error writing SGF to string. \n   found: %q \nexpected: %q", game.String(), variant_sgf_1)
-	}
+	game := games[0]
+	assert.Equal(t, game.String(), variant_sgf_1, "error writing SGF to string")
 }
 
 func TestVariationsToString(t *testing.T) {
@@ -54,14 +48,8 @@ func TestVariationsToString(t *testing.T) {
 		";W[ee])"
 
 	games, err := parseString(gameStr)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	game := games[0]
+	assert.Equal(t, err, nil, "problem parsing game string")
 
-	sgfStr := game.String()
-	if sgfStr != gameStr {
-		t.Errorf("error writing SGF to string. \n   Found: %q, \nExpected: %q", sgfStr, gameStr)
-	}
+	game := games[0]
+	assert.Equal(t, game.String(), gameStr, "error writing SGF to string")
 }
