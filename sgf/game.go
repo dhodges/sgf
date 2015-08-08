@@ -6,22 +6,22 @@ import (
 	"strings"
 )
 
-type SGFGame struct {
+type Game struct {
 	GameInfo GameInfo
 	GameTree *Node
 	Errors   []error
 }
 
-func (sgf *SGFGame) AddInfo(prop Property) {
+func (sgf *Game) AddInfo(prop Property) {
 	sgf.GameInfo[strings.ToUpper(prop.Name)] = prop.Value
 }
 
-func (sgf *SGFGame) GetInfo(name string) (value string, ok bool) {
+func (sgf *Game) GetInfo(name string) (value string, ok bool) {
 	value, ok = sgf.GameInfo[strings.ToUpper(name)]
 	return value, ok
 }
 
-func (sgf SGFGame) GameTreeString() string {
+func (sgf Game) GameTreeString() string {
 	treeString := ""
 	for node := sgf.GameTree; node != nil; node = node.Next {
 		treeString += node.String()
@@ -29,11 +29,11 @@ func (sgf SGFGame) GameTreeString() string {
 	return treeString
 }
 
-func (sgf SGFGame) String() string {
+func (sgf Game) String() string {
 	return "(" + sgf.GameInfo.String() + sgf.GameTreeString() + ")"
 }
 
-func (sgf SGFGame) NodeCount() int {
+func (sgf Game) NodeCount() int {
 	count := 0
 	for node := sgf.GameTree; node != nil; node = node.Next {
 		count += 1
@@ -41,7 +41,7 @@ func (sgf SGFGame) NodeCount() int {
 	return count
 }
 
-func (sgf SGFGame) NthNode(n int) (node *Node, err error) {
+func (sgf Game) NthNode(n int) (node *Node, err error) {
 	if n < 1 {
 		return nil, errors.New("n less than 1")
 	}
@@ -56,6 +56,6 @@ func (sgf SGFGame) NthNode(n int) (node *Node, err error) {
 	return node, nil
 }
 
-func (sgf *SGFGame) AddError(msg string) {
+func (sgf *Game) AddError(msg string) {
 	sgf.Errors = append(sgf.Errors, errors.New(msg))
 }

@@ -49,7 +49,7 @@ func listSgfFiles(dirname string) ([]string, error) {
 	return fileList, err
 }
 
-func parseString(str string) (games []*sgf.SGFGame, err error) {
+func parseString(str string) (games []*sgf.Game, err error) {
 	games = Parse(str)
 	if len(games[0].Errors) > 0 {
 		return nil, errors.New(fmt.Sprintf("problems parsing sgf: %q", games[0].Errors[0]))
@@ -58,7 +58,7 @@ func parseString(str string) (games []*sgf.SGFGame, err error) {
 	return games, nil
 }
 
-func parseFixture(fixname string) (games []*sgf.SGFGame, err error) {
+func parseFixture(fixname string) (games []*sgf.Game, err error) {
 	fixture, err := sgf_fixture(fixname)
 	if err != nil {
 		return games, err

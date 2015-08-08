@@ -6,7 +6,7 @@ import (
 	"github.com/dhodges/sgfinfo/sgf"
 )
 
-func verify(t *testing.T, sgf *sgf.SGFGame, propertyName, expected string) {
+func verify(t *testing.T, sgf *sgf.Game, propertyName, expected string) {
 	value, _ := sgf.GameInfo[propertyName]
 
 	if value != expected {

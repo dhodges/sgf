@@ -2,9 +2,9 @@ package parse
 
 import "github.com/dhodges/sgfinfo/sgf"
 
-func Parse(input string) (games []*sgf.SGFGame) {
+func Parse(input string) (games []*sgf.Game) {
 	var currentNode *sgf.Node
-	var game *sgf.SGFGame
+	var game *sgf.Game
 	l := lex(input)
 	prop := sgf.Property{}
 	parsingSetup := false
@@ -17,7 +17,7 @@ Loop:
 		switch i.typ {
 		case itemLeftParen:
 			if !parsingSetup && !parsingGametree {
-				game = new(sgf.SGFGame)
+				game = new(sgf.Game)
 				game.GameInfo = make(sgf.GameInfo)
 				games = append(games, game)
 				parsingSetup = true

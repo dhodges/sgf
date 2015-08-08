@@ -7,7 +7,7 @@ import (
 )
 
 func TestGameInfoToString(t *testing.T) {
-	game := new(sgf.SGFGame)
+	game := new(sgf.Game)
 	game.GameInfo = make(sgf.GameInfo)
 	game.AddInfo(sgf.Property{Name: sgf.BlackPlayerName, Value: "Lee Sedol"})
 	game.AddInfo(sgf.Property{Name: sgf.BlackPlayerRank, Value: "9p"})

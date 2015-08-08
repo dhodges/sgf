@@ -53,7 +53,7 @@ func zipSGFfileContents(f *zip.File) (contents string, err error) {
 	return string(bytes), nil
 }
 
-func ParseZipSGFfile(zippath, fname string) (games []*sgf.SGFGame, err error) {
+func ParseZipSGFfile(zippath, fname string) (games []*sgf.Game, err error) {
 	r, err := zip.OpenReader(zippath)
 	if err != nil {
 		return nil, err
@@ -77,7 +77,7 @@ func ParseZipSGFfile(zippath, fname string) (games []*sgf.SGFGame, err error) {
 	return nil, err
 }
 
-func ParseZipAllSGFfiles(zippath string) (games []*sgf.SGFGame, err error) {
+func ParseZipAllSGFfiles(zippath string) (games []*sgf.Game, err error) {
 	fnames, err := ListZipSGFfiles(zippath)
 	if err != nil {
 		return nil, err
