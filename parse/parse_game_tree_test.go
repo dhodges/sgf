@@ -53,7 +53,7 @@ func TestParsingGameTree(t *testing.T) {
 }
 
 func TestParsingFullGameTree(t *testing.T) {
-	games, err := parseFixture("2014.07.06_WAGC-Rd1-Lithuania-Canada-var.sgf")
+	games, err := ParseFixture("2014.07.06_WAGC-Rd1-Lithuania-Canada-var.sgf")
 	if err != nil {
 		t.Error(err)
 		return

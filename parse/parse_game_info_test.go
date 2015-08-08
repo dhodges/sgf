@@ -40,7 +40,7 @@ func TestParsingGameInfo(t *testing.T) {
 }
 
 func TestParsingFullGameInfo(t *testing.T) {
-	games, err := parseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
+	games, err := ParseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
 	if err != nil {
 		t.Error(err)
 		return
