@@ -2,10 +2,6 @@ package parse
 
 // Derived from https://gist.github.com/bemasher/1777766
 
-import (
-	"fmt"
-)
-
 type Stack struct {
 	top  *Element
 	size int
@@ -41,17 +37,3 @@ func (s *Stack) Peek() (value interface{}) {
 	return nil
 }
 
-func main() {
-	stack := new(Stack)
-
-	stack.Push("Things")
-	stack.Push("and")
-	stack.Push("Stuff")
-
-	for stack.Len() > 0 {
-		// We have to do a type assertion because we get back a variable of type
-		// interface{} while the underlying type is a string.
-		fmt.Printf("%s ", stack.Pop().(string))
-	}
-	fmt.Println()
-}
