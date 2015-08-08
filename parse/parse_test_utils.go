@@ -18,7 +18,7 @@ func parseString(str string) (games []*sgf.Game, err error) {
 }
 
 func parseFixture(fixname string) (games []*sgf.Game, err error) {
-	fixture, err := fixtures.Sgf_fixture(fixname)
+	fixture, err := fixtures.Sgf(fixname)
 	if err != nil {
 		return games, err
 	}

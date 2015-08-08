@@ -13,7 +13,7 @@ func fixture_dirname() string {
 	return parDir + "/" + "fixtures"
 }
 
-func Sgf_fixture(fname string) (fixture string, err error) {
+func Sgf(fname string) (fixture string, err error) {
 	var bytes []byte
 	bytes, err = ioutil.ReadFile(fixture_dirname() + "/sgf_files/" + fname)
 	if err == nil {
