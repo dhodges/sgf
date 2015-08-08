@@ -4,10 +4,11 @@ import (
 	"testing"
 
 	"github.com/dhodges/sgfinfo/sgf"
+	"github.com/dhodges/sgfinfo/fixtures"
 )
 
 func TestListingZipArchive(t *testing.T) {
-	sgfFileList, err := ListZipSGFfiles(zip_fixture_fpath("go4go_collection-20150118.zip"))
+	sgfFileList, err := ListZipSGFfiles(fixtures.Zip_fixture_fpath("go4go_collection-20150118.zip"))
 	if err != nil {
 		t.Error(err)
 		return
@@ -25,7 +26,7 @@ func TestListingZipArchive(t *testing.T) {
 }
 
 func TestListingZipArchiveOnlySGFfiles(t *testing.T) {
-	sgfFileList, err := ListZipSGFfiles(zip_fixture_fpath("3_shusaku_games.zip"))
+	sgfFileList, err := ListZipSGFfiles(fixtures.Zip_fixture_fpath("3_shusaku_games.zip"))
 	if err != nil {
 		t.Error(err)
 		return
@@ -42,7 +43,7 @@ func TestListingZipArchiveOnlySGFfiles(t *testing.T) {
 }
 
 func TestParsingZipArchiveSGFfile(t *testing.T) {
-	zipArchive := zip_fixture_fpath("3_shusaku_games.zip")
+	zipArchive := fixtures.Zip_fixture_fpath("3_shusaku_games.zip")
 	games, err := ParseZipSGFfile(zipArchive, "1840/Ito_Showa-Kuwahara_Shusaku.sgf")
 	if err != nil {
 		t.Error(err)
@@ -65,7 +66,7 @@ func TestParsingZipArchiveSGFfile(t *testing.T) {
 }
 
 func TestParsingZipArchiveAllSGFfiles(t *testing.T) {
-	zipArchive := zip_fixture_fpath("3_shusaku_games.zip")
+	zipArchive := fixtures.Zip_fixture_fpath("3_shusaku_games.zip")
 	games, err := ParseZipAllSGFfiles(zipArchive)
 	if err != nil {
 		t.Error(err)

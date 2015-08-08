@@ -4,10 +4,11 @@ import (
 	"testing"
 
 	"github.com/dhodges/sgfinfo/sgf"
+	"github.com/dhodges/sgfinfo/fixtures"
 )
 
 func TestParseMultiple(t *testing.T) {
-	fixture, err := sgf_fixture("honinbo.sgf")
+	fixture, err := fixtures.Sgf_fixture("honinbo.sgf")
 	if err != nil {
 		t.Error("problem reading fixture 'honinbo.sgf'")
 		return
