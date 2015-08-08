@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/dhodges/sgf"
+	"github.com/dhodges/sgf/sgf"
 )
 
 func ListZipSGFfiles(fpath string) (fnames sort.StringSlice, err error) {

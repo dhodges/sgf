@@ -3,7 +3,7 @@ package parse
 import (
 	"testing"
 
-	"github.com/dhodges/sgf"
+	"github.com/dhodges/sgf/sgf"
 )
 
 func TestGameInfoToString(t *testing.T) {
