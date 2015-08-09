@@ -28,7 +28,7 @@ func (gi GameInfo) String() string {
 func (gi GameInfo) ToJson() ([]byte, error) {
 	json_map := gi.clone()
 	for _, k := range gi.SortedKeys() {
-		key := propsToKeys[strings.ToUpper(k)]
+		key := property2key(k)
 		if key != "" {
 			json_map[key] = json_map[k]
 			delete(json_map, k)
@@ -46,7 +46,7 @@ func (gi GameInfo) FromJson(json_str string) (GameInfo, error) {
 	gameInfo := make(GameInfo)
 
 	for k, _ := range json_map {
-		key := keysToProps[k]
+		key := key2property(k)
 		if key != "" {
 			gameInfo[strings.ToUpper(key)] = json_map[k]
 		} else {
@@ -73,6 +73,10 @@ func (gi GameInfo) clone() map[string]string {
 		duplicate[k] = v
 	}
 	return duplicate
+}
+
+func property2key(propname string) string {
+	return propsToKeys[strings.ToUpper(propname)]
 }
 
 var propsToKeys = map[string]string{
@@ -104,31 +108,35 @@ var propsToKeys = map[string]string{
 	"WT": "WhitePlayerTeam",
 }
 
+func key2property(key string) string {
+	return keysToProps[strings.ToLower(key)]
+}
+
 var keysToProps = map[string]string{
-	"Annotator":       "AN",
-	"BlackPlayerName": "PB",
-	"BlackPlayerRank": "BR",
-	"BlackPlayerTeam": "BT",
-	"Boardsize":       "SZ",
-	"Charset":         "CA",
-	"Comment":         "C",
-	"Copyright":       "CP",
-	"Date":            "DT",
-	"Event":           "EV",
-	"GameComment":     "GC",
-	"GameName":        "GN",
-	"Handicap":        "HA",
-	"Komi":            "KM",
-	"Opening":         "ON",
-	"Overtime":        "OT",
-	"Place":           "PC",
-	"Result":          "RE",
-	"Round":           "RO",
-	"Rules":           "RU",
-	"Source":          "SO",
-	"TimeLimits":      "TM",
-	"User":            "US",
-	"WhitePlayerName": "PW",
-	"WhitePlayerRank": "WR",
-	"WhitePlayerTeam": "WT",
+	"annotator":       "AN",
+	"blackplayername": "PB",
+	"blackplayerrank": "BR",
+	"blackplayerteam": "BT",
+	"boardsize":       "SZ",
+	"charset":         "CA",
+	"comment":         "C",
+	"copyright":       "CP",
+	"date":            "DT",
+	"event":           "EV",
+	"gamecomment":     "GC",
+	"gamename":        "GN",
+	"handicap":        "HA",
+	"komi":            "KM",
+	"opening":         "ON",
+	"overtime":        "OT",
+	"place":           "PC",
+	"result":          "RE",
+	"round":           "RO",
+	"rules":           "RU",
+	"source":          "SO",
+	"timelimits":      "TM",
+	"user":            "US",
+	"whiteplayername": "PW",
+	"whiteplayerrank": "WR",
+	"whiteplayerteam": "WT",
 }
