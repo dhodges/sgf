@@ -1,8 +1,11 @@
 package tests
 
 import (
-	"errors"
 	"fmt"
+	"errors"
+	"sort"
+	"strings"
+	"encoding/json"
 
 	"github.com/dhodges/sgfinfo/sgf"
 	"github.com/dhodges/sgfinfo/parse"
@@ -25,4 +28,23 @@ func parseFixture(fixname string) (games []*sgf.Game, err error) {
 	}
 
 	return parseString(fixture)
+}
+
+func mapFromJson(json_str string) (map[string]string, error) {
+	r := strings.NewReader(json_str)
+	var json_map map[string]string
+	err := json.NewDecoder(r).Decode(&json_map)
+	if err != nil {
+		return nil, err
+	}
+
+	return json_map, nil
+}
+
+func keysFromMap(keyMap map[string]string) (keys sort.StringSlice) {
+	for k, _ := range keyMap {
+		keys = append(keys, k)
+	}
+	sort.Sort(keys)
+	return keys
 }

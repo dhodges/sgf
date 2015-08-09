@@ -1,40 +1,65 @@
 package tests
 
 import (
-  "testing"
+	"testing"
 
-  "github.com/dhodges/sgfinfo/sgf"
-  "github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGameInfoJson(t *testing.T) {
-  games, err := parseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
-  assert.Equal(t, err, nil, "problem loading fixture")
+	games, err := parseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
+	assert.Equal(t, err, nil, "problem loading fixture")
 
-  game := games[0]
-  assert.Equal(t, game.GameInfo["BR"], "5p", "")
-  assert.Equal(t, game.GameInfo["CA"], "UTF-8", "")
-  assert.Equal(t, game.GameInfo["DT"], "1933-10-16", "")
-  assert.Equal(t, game.GameInfo["EV"], "The Game of the Century", "")
-  assert.Equal(t, game.GameInfo["KM"], "0", "")
-  assert.Equal(t, game.GameInfo["PB"], "Go Seigen", "")
-  assert.Equal(t, game.GameInfo["PW"], "Honinbo Shusai", "")
-  assert.Equal(t, game.GameInfo["RE"], "W+2", "")
-  assert.Equal(t, game.GameInfo["SZ"], "19", "")
-  assert.Equal(t, game.GameInfo["WR"], "9p", "")
+	gi := games[0].GameInfo
+	assert.Equal(t, "5p",             gi["BR"], "")
+	assert.Equal(t, "UTF-8",          gi["CA"], "")
+	assert.Equal(t, "1933-10-16",     gi["DT"], "")
+	assert.Equal(t, "0",              gi["KM"], "")
+	assert.Equal(t, "Go Seigen",      gi["PB"], "")
+	assert.Equal(t, "Honinbo Shusai", gi["PW"], "")
+	assert.Equal(t, "W+2",            gi["RE"], "")
+	assert.Equal(t, "19",             gi["SZ"], "")
+	assert.Equal(t, "9p",             gi["WR"], "")
+	assert.Equal(t, "The Game of the Century", gi["EV"], "")
 
-  b, err := game.GameInfo.ToJson()
-  assert.Equal(t, err, nil, "problem generating json")
+	b, err := gi.ToJson()
+	assert.Equal(t, err, nil, "problem generating json")
 
-  var gi sgf.GameInfo
-  err = gi.FromJson(string(b))
-  assert.Equal(t, err, nil, "problem unmarshalling json")
+	gi2, err := gi.FromJson(string(b))
+	assert.Equal(t, err, nil, "problem unmarshalling json")
 
+	assert.Equal(t, "5p",             gi2["BR"], "")
+	assert.Equal(t, "UTF-8",          gi2["CA"], "")
+	assert.Equal(t, "1933-10-16",     gi2["DT"], "")
+	assert.Equal(t, "0",              gi2["KM"], "")
+	assert.Equal(t, "Go Seigen",      gi2["PB"], "")
+	assert.Equal(t, "Honinbo Shusai", gi2["PW"], "")
+	assert.Equal(t, "W+2",            gi2["RE"], "")
+	assert.Equal(t, "19",             gi2["SZ"], "")
+	assert.Equal(t, "9p",             gi2["WR"], "")
+	assert.Equal(t, "The Game of the Century", gi2["EV"], "")
 }
 
+func TestGameInfoJsonKeys(t *testing.T) {
+	games, err := parseFixture("19331016-Honinbo_Shusai-Go_Seigen.sgf")
+	assert.Equal(t, err, nil, "problem loading fixture")
 
+	b, err := games[0].GameInfo.ToJson()
+	assert.Equal(t, err, nil, "problem generating json")
 
+	keyMap, err := mapFromJson(string(b))
+	keys := keysFromMap(keyMap)
 
-  }
+	assert.Equal(t, "BlackPlayerName", keys[0], "")
+	assert.Equal(t, "BlackPlayerRank", keys[1], "")
+	assert.Equal(t, "Boardsize",       keys[2], "")
+	assert.Equal(t, "Charset",         keys[3], "")
+	assert.Equal(t, "Comment",         keys[4], "")
+	assert.Equal(t, "Date",            keys[5], "")
+	assert.Equal(t, "Event",           keys[6], "")
+	assert.Equal(t, "Komi",            keys[7], "")
+	assert.Equal(t, "Place",           keys[8], "")
+	assert.Equal(t, "Result",          keys[9], "")
+	assert.Equal(t, "WhitePlayerName", keys[10], "")
+	assert.Equal(t, "WhitePlayerRank", keys[11], "")
 }
-
