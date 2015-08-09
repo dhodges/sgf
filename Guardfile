@@ -1,22 +1,15 @@
 
-def tempfile(fname)
-  fname = File.basename(fname)
-  fname =~ /.*flymake.*/ || fname =~ /^[.#]+.*/
-end
-
-def runtest(fname)
-  puts "#{File.basename(fname)} changed"
-  wd = Dir.getwd
-
-  Dir.chdir File.dirname(fname)
-  `go test -v && go vet`
-ensure
-  Dir.chdir wd
+def tempfile?(fname)
+  File.basename(fname) =~ /^[.#]+.*/
 end
 
 guard :shell do
   watch /^[^.#]+.*.go$/ do |m|
-    fname = m[0]
-    runtest(fname) unless tempfile(fname)
+    unless tempfile?(m[0])
+      wd = Dir.getwd
+      Dir.chdir './tests'
+      puts `go test`
+      Dir.chdir wd
+    end
   end
 end
