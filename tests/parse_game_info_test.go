@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/dhodges/sgfinfo/sgf"
+	"github.com/dhodges/sgfinfo/parse"
   "github.com/stretchr/testify/assert"
 )
 
@@ -19,7 +20,7 @@ var gameInfoString = "(;" +
 	")"
 
 func TestParsingGameInfo(t *testing.T) {
-	games, err := parseString(gameInfoString)
+	games, err := parse.ParseString(gameInfoString)
 	assert.Equal(t, err, nil, "problem loading fixture")
 
 	game := games[0]

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/dhodges/sgfinfo/sgf"
+	"github.com/dhodges/sgfinfo/parse"
   "github.com/stretchr/testify/assert"
 )
 
@@ -35,7 +36,7 @@ func TestGameInfoToString(t *testing.T) {
 func TestSGFtoString(t *testing.T) {
 	variant_sgf_1 := "(;GM[1];B[dp];W[pd];B[cd])"
 
-	games, err := parseString(variant_sgf_1)
+	games, err := parse.ParseString(variant_sgf_1)
 	assert.Equal(t, err, nil, "problem parsing game string")
 
 	game := games[0]
@@ -47,7 +48,7 @@ func TestVariationsToString(t *testing.T) {
 		"(;W[ef];B[cf](;W[fc];B[dc](;W[pf];B[qk])(;W[rl];B[qg];W[sl]));W[eh];B[ec])" +
 		";W[ee])"
 
-	games, err := parseString(gameStr)
+	games, err := parse.ParseString(gameStr)
 	assert.Equal(t, err, nil, "problem parsing game string")
 
 	game := games[0]

@@ -1,6 +1,20 @@
 package parse
 
-import "github.com/dhodges/sgfinfo/sgf"
+import (
+	"fmt"
+	"errors"
+
+	"github.com/dhodges/sgfinfo/sgf"
+)
+
+func ParseString(str string) (games []*sgf.Game, err error) {
+	games = Parse(str)
+	if len(games[0].Errors) > 0 {
+		return nil, errors.New(fmt.Sprintf("problems parsing sgf: %q", games[0].Errors[0]))
+	}
+
+	return games, nil
+}
 
 func Parse(input string) (games []*sgf.Game) {
 	var currentNode *sgf.Node

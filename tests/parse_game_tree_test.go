@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 
+  "github.com/dhodges/sgfinfo/parse"
   "github.com/stretchr/testify/assert"
 )
 
@@ -17,7 +18,7 @@ var gameTreeString = "(" +
 	")"
 
 func TestParsingGameTree(t *testing.T) {
-	games, err := parseString(gameTreeString)
+	games, err := parse.ParseString(gameTreeString)
 	assert.Equal(t, err, nil, "problem parsing gametree string")
 
 	game := games[0]
