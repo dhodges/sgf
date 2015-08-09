@@ -1,9 +1,10 @@
 package fixtures
 
 import (
-	"io/ioutil"
 	"path/filepath"
 	"runtime"
+
+	"github.com/dhodges/sgfinfo/util"
 )
 
 func fixture_dirname() string {
@@ -13,13 +14,8 @@ func fixture_dirname() string {
 	return parDir + "/" + "fixtures"
 }
 
-func Sgf(fname string) (fixture string, err error) {
-	var bytes []byte
-	bytes, err = ioutil.ReadFile(fixture_dirname() + "/sgf_files/" + fname)
-	if err == nil {
-		fixture = string(bytes)
-	}
-	return fixture, err
+func Sgf(fname string) (string, error) {
+	return util.File2string(fixture_dirname() + "/sgf_files/" + fname)
 }
 
 func Zip_fpath(fname string) string {

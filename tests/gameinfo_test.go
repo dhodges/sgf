@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 
+	"github.com/dhodges/sgfinfo/util"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -47,8 +48,8 @@ func TestGameInfoJsonKeys(t *testing.T) {
 	b, err := games[0].GameInfo.ToJson()
 	assert.Equal(t, err, nil, "problem generating json")
 
-	keyMap, err := mapFromJson(string(b))
-	keys := keysFromMap(keyMap)
+	keyMap, err := util.MapFromJson(string(b))
+	keys := util.KeysFromMap(keyMap)
 
 	assert.Equal(t, "BlackPlayerName", keys[0], "")
 	assert.Equal(t, "BlackPlayerRank", keys[1], "")

@@ -1,25 +1,17 @@
 package sgf
 
 import (
-	"sort"
 	"strings"
 	"encoding/json"
+
+	"github.com/dhodges/sgfinfo/util"
 )
 
 type GameInfo map[string]string
 
-func (gi GameInfo) SortedKeys() []string {
-	var keys sort.StringSlice
-	for k, _ := range gi {
-		keys = append(keys, k)
-	}
-	sort.Sort(keys)
-	return keys
-}
-
 func (gi GameInfo) String() string {
 	str := ""
-	for _, k := range gi.SortedKeys() {
+	for _, k := range util.KeysFromMap(gi) {
 		str += k + "[" + gi[k] + "]"
 	}
 	return ";" + str
@@ -27,7 +19,7 @@ func (gi GameInfo) String() string {
 
 func (gi GameInfo) ToJson() ([]byte, error) {
 	json_map := gi.clone()
-	for _, k := range gi.SortedKeys() {
+	for _, k := range util.KeysFromMap(gi) {
 		key := property2key(k)
 		if key != "" {
 			json_map[key] = json_map[k]
@@ -38,7 +30,7 @@ func (gi GameInfo) ToJson() ([]byte, error) {
 }
 
 func (gi GameInfo) FromJson(json_str string) (GameInfo, error) {
-	json_map, err := mapFromJson(json_str)
+	json_map, err := util.MapFromJson(json_str)
 	if err != nil {
 		return nil, err
 	}
@@ -54,17 +46,6 @@ func (gi GameInfo) FromJson(json_str string) (GameInfo, error) {
 		}
 	}
 	return gameInfo, nil
-}
-
-func mapFromJson(json_str string) (map[string]string, error) {
-	r := strings.NewReader(json_str)
-	var json_map map[string]string
-	err := json.NewDecoder(r).Decode(&json_map)
-	if err != nil {
-		return nil, err
-	}
-
-	return json_map, nil
 }
 
 func (gi GameInfo) clone() map[string]string {
