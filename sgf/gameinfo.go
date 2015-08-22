@@ -62,9 +62,9 @@ func property2key(propname string) string {
 
 var propsToKeys = map[string]string{
 	"AN": "Annotator",
-	"PB": "BlackPlayerName",
-	"BR": "BlackPlayerRank",
-	"BT": "BlackPlayerTeam",
+	"PB": "PlayerBlackName",
+	"BR": "PlayerBlackRank",
+	"BT": "PlayerBlackTeam",
 	"SZ": "Boardsize",
 	"CA": "Charset",
 	"C":  "Comment",
@@ -84,9 +84,9 @@ var propsToKeys = map[string]string{
 	"SO": "Source",
 	"TM": "TimeLimits",
 	"US": "User",
-	"PW": "WhitePlayerName",
-	"WR": "WhitePlayerRank",
-	"WT": "WhitePlayerTeam",
+	"PW": "PlayerWhiteName",
+	"WR": "PlayerWhiteRank",
+	"WT": "PlayerWhiteTeam",
 }
 
 func key2property(key string) string {
@@ -95,9 +95,6 @@ func key2property(key string) string {
 
 var keysToProps = map[string]string{
 	"annotator":       "AN",
-	"blackplayername": "PB",
-	"blackplayerrank": "BR",
-	"blackplayerteam": "BT",
 	"boardsize":       "SZ",
 	"charset":         "CA",
 	"comment":         "C",
@@ -117,7 +114,10 @@ var keysToProps = map[string]string{
 	"source":          "SO",
 	"timelimits":      "TM",
 	"user":            "US",
-	"whiteplayername": "PW",
-	"whiteplayerrank": "WR",
-	"whiteplayerteam": "WT",
+	"playerblackname": "PB",
+	"playerblackrank": "BR",
+	"playerblackteam": "BT",
+	"playerwhitename": "PW",
+	"playerwhiterank": "WR",
+	"playerwhiteteam": "WT",
 }

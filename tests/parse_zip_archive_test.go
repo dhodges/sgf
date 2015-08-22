@@ -31,8 +31,8 @@ func TestParsingZipArchiveSGFfile(t *testing.T) {
 	assert.Equal(t, err, nil, "problem parsing zip archive")
 
 	game := games[0]
-	assert.Equal(t, game.GameInfo[sgf.WhitePlayerName], "Ito Showa", "wrong white player name found")
-	assert.Equal(t, game.GameInfo[sgf.BlackPlayerName], "Kuwahara Shusaku", "wrong black player name found")
+	assert.Equal(t, game.GameInfo[sgf.PlayerWhiteName], "Ito Showa", "wrong white player name found")
+	assert.Equal(t, game.GameInfo[sgf.PlayerBlackName], "Kuwahara Shusaku", "wrong black player name found")
 	assert.Equal(t, game.NodeCount(), 202,              "wrong node count")
 }
 
@@ -43,6 +43,6 @@ func TestParsingZipArchiveAllSGFfiles(t *testing.T) {
 
 	assert.Equal(t, len(games), 3, "wrong number of games")
 	assert.Equal(t, games[0].GameInfo[sgf.Date],            "1840-03-14",        "first game is incorrect")
-	assert.Equal(t, games[1].GameInfo[sgf.WhitePlayerName], "Ota Yuzo",          "wrong white player name")
-	assert.Equal(t, games[2].GameInfo[sgf.WhitePlayerName], "Kadono Tadazaemon", "wrong white player name")
+	assert.Equal(t, games[1].GameInfo[sgf.PlayerWhiteName], "Ota Yuzo",          "wrong white player name")
+	assert.Equal(t, games[2].GameInfo[sgf.PlayerWhiteName], "Kadono Tadazaemon", "wrong white player name")
 }

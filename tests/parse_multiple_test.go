@@ -17,6 +17,6 @@ func TestParseMultiple(t *testing.T) {
 	assert.Equal(t, len(games), 259, "wrong number of games")
 
 	game := games[6]
-	assert.Equal(t, game.GameInfo[sgf.BlackPlayerName], "Hashimoto Utaro",  "wrong black player name")
+	assert.Equal(t, game.GameInfo[sgf.PlayerBlackName], "Hashimoto Utaro",  "wrong black player name")
 	assert.Equal(t, game.GameInfo[sgf.Date],            "1943-05-05,06,07", "wrong date")
 }

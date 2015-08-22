@@ -37,6 +37,6 @@ func TestParsingFullGameInfo(t *testing.T) {
 	assert.Equal(t, game.GameInfo[sgf.Comment][0:27], "This match was sponsored by", "invalid comment")
 
 	assert.Equal(t, game.GameInfo[sgf.Event], "The Game of the Century",  "invalid property")
-	assert.Equal(t, game.GameInfo[sgf.BlackPlayerName], "Go Seigen",      "invalid property")
-	assert.Equal(t, game.GameInfo[sgf.WhitePlayerName], "Honinbo Shusai", "invalid property")
+	assert.Equal(t, game.GameInfo[sgf.PlayerBlackName], "Go Seigen",      "invalid property")
+	assert.Equal(t, game.GameInfo[sgf.PlayerWhiteName], "Honinbo Shusai", "invalid property")
 }
