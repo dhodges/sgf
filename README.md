@@ -10,6 +10,12 @@ to build:
 $ go build
 ```
 
+to test:
+```
+$ cd tests
+$ go test
+```
+
 usage:
 ```
 $ sgfinfo <sgf_file>
