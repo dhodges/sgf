@@ -5,6 +5,12 @@ Steps toward a command-line query tool for SGF Go game files.
 
 This is still rudimentary.
 
+to fetch:
+```
+go get github.com/dhodges/sgfinfo
+go get github.com/stretchr/testify
+```
+
 to build:
 ```
 $ go build
